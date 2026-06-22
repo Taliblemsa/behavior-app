@@ -689,7 +689,7 @@
 
         // ------------------ DATA LOGIC (Modified for GitHub Fetch) ------------------
         function fetchStudentData() {
-            if (!CONFIG.GAS_URL || CONFIG.GAS_URL === "วาง_WEB_APP_URL_ของคุณครูที่นี่") {
+            if (!CONFIG.GAS_URL || CONFIG.GAS_URL === "https://script.google.com/macros/s/AKfycbx3Nf7EUJQWDDukKj-nstaVNIeRthp9WfsXo5iJZ2WerVH0EKWVPDO2xFR4Gv-mYosL/exec") {
                 const errM = document.getElementById('system-error-msg'); if(errM) errM.classList.remove('hidden');
                 const errD = document.getElementById('error-details'); if(errD) errD.innerText = "กรุณาใส่ Web App URL ในตัวแปร CONFIG.GAS_URL";
                 return;
