@@ -20,8 +20,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Sarabun:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Library สำหรับแปลงหน้าจอเป็นรูปสลิป -->
+    <!-- html2canvas สำหรับทำสลิปรูปภาพ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <script>
@@ -51,80 +50,23 @@
         .bg-container { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background-size: cover; background-position: center; background-attachment: fixed; transition: background-image 0.5s ease; }
         .bg-sphere { position: absolute; filter: blur(90px); opacity: 0.65; border-radius: 50%; animation: pulse 15s infinite alternate ease-in-out; }
         
-        /* Theme 1: Amber */
+        /* Themes */
         .theme-amber .sphere-1 { top: -10%; right: -5%; width: 75vw; height: 75vw; background: radial-gradient(circle, #fef3c7, #f59e0b); }
         .theme-amber .sphere-2 { bottom: -15%; left: -10%; width: 85vw; height: 85vw; background: radial-gradient(circle, #ffedd5, #ea580c); animation-delay: -5s; }
         .theme-amber .btn-primary { background-color: #f59e0b; color: #1e293b; }
         .theme-amber .text-primary { color: #ea580c; }
-        .theme-amber .border-primary { border-color: #f59e0b; }
-        .theme-amber .shape-card, .theme-amber .shape-btn, .theme-amber .shape-input { border-radius: 28px; }
-        .theme-amber .icon-box { border-radius: 50%; background: rgba(245, 158, 11, 0.15); color: #ea580c; }
-
-        /* Theme 2: Blue */
         .theme-blue .sphere-1 { top: -10%; right: -5%; width: 75vw; height: 75vw; background: radial-gradient(circle, #e0f2fe, #3b82f6); }
         .theme-blue .sphere-2 { bottom: -15%; left: -10%; width: 85vw; height: 85vw; background: radial-gradient(circle, #dbeafe, #0284c7); animation-delay: -5s; }
         .theme-blue .btn-primary { background-color: #3b82f6; color: white; }
         .theme-blue .text-primary { color: #3b82f6; }
-        .theme-blue .border-primary { border-color: #3b82f6; }
-        .theme-blue .shape-card { border-radius: 16px; }
-        .theme-blue .shape-btn, .theme-blue .shape-input { border-radius: 12px; }
-        .theme-blue .icon-box { border-radius: 12px; background: rgba(59, 130, 246, 0.15); color: #0284c7; }
-
-        /* Theme 3: Emerald */
         .theme-emerald .sphere-1 { top: -10%; right: -5%; width: 75vw; height: 75vw; background: radial-gradient(circle, #dcfce7, #10b981); }
         .theme-emerald .sphere-2 { bottom: -15%; left: -10%; width: 85vw; height: 85vw; background: radial-gradient(circle, #ecfdf5, #059669); animation-delay: -5s; }
         .theme-emerald .btn-primary { background-color: #10b981; color: white; }
         .theme-emerald .text-primary { color: #10b981; }
-        .theme-emerald .border-primary { border-color: #10b981; }
-        .theme-emerald .shape-card, .theme-emerald .shape-btn, .theme-emerald .shape-input { border-radius: 4px; }
-        .theme-emerald .icon-box { border-radius: 0px; background: transparent; color: #059669; border: 1.5px solid #10b981; }
-
-        /* Theme 4: Rose */
         .theme-rose .sphere-1 { top: -10%; right: -5%; width: 75vw; height: 75vw; background: radial-gradient(circle, #ffe4e6, #f43f5e); }
         .theme-rose .sphere-2 { bottom: -15%; left: -10%; width: 85vw; height: 85vw; background: radial-gradient(circle, #fecdd3, #e11d48); animation-delay: -5s; }
         .theme-rose .btn-primary { background-color: #f43f5e; color: white; }
         .theme-rose .text-primary { color: #e11d48; }
-        .theme-rose .border-primary { border-color: #f43f5e; }
-        .theme-rose .shape-card, .theme-rose .shape-btn, .theme-rose .shape-input { border-radius: 20px; }
-        .theme-rose .icon-box { border-radius: 20px; background: rgba(244, 63, 94, 0.15); color: #e11d48; }
-
-        /* Theme 5: Violet */
-        .theme-violet .sphere-1 { top: -10%; right: -5%; width: 75vw; height: 75vw; background: radial-gradient(circle, #f3e8ff, #8b5cf6); }
-        .theme-violet .sphere-2 { bottom: -15%; left: -10%; width: 85vw; height: 85vw; background: radial-gradient(circle, #e9d5ff, #7c3aed); animation-delay: -5s; }
-        .theme-violet .btn-primary { background-color: #8b5cf6; color: white; }
-        .theme-violet .text-primary { color: #7c3aed; }
-        .theme-violet .border-primary { border-color: #8b5cf6; }
-        .theme-violet .shape-card { border-radius: 24px 8px; }
-        .theme-violet .shape-btn, .theme-violet .shape-input { border-radius: 16px 6px; }
-        .theme-violet .icon-box { border-radius: 12px; background: rgba(139, 92, 246, 0.15); color: #7c3aed; }
-
-        /* Theme 6: Slate */
-        .theme-slate .sphere-1 { top: -10%; right: -5%; width: 75vw; height: 75vw; background: radial-gradient(circle, #cbd5e1, #475569); }
-        .theme-slate .sphere-2 { bottom: -15%; left: -10%; width: 85vw; height: 85vw; background: radial-gradient(circle, #e2e8f0, #334155); animation-delay: -5s; }
-        .theme-slate .btn-primary { background-color: #334155; color: white; }
-        .theme-slate .text-primary { color: #334155; }
-        .theme-slate .border-primary { border-color: #334155; }
-        .theme-slate .shape-card, .theme-slate .shape-btn, .theme-slate .shape-input { border-radius: 8px; }
-        .theme-slate .icon-box { border-radius: 8px; background: rgba(71, 85, 105, 0.15); color: #334155; }
-
-        /* Theme 7: Cyan */
-        .theme-cyan .sphere-1 { top: -10%; right: -5%; width: 75vw; height: 75vw; background: radial-gradient(circle, #cffafe, #06b6d4); }
-        .theme-cyan .sphere-2 { bottom: -15%; left: -10%; width: 85vw; height: 85vw; background: radial-gradient(circle, #ecfeff, #0891b2); animation-delay: -5s; }
-        .theme-cyan .btn-primary { background-color: #06b6d4; color: #0f172a; } 
-        .theme-cyan .text-primary { color: #0891b2; }
-        .theme-cyan .border-primary { border-color: #06b6d4; }
-        .theme-cyan .shape-card, .theme-cyan .shape-btn, .theme-cyan .shape-input { border-radius: 30px; }
-        .theme-cyan .icon-box { border-radius: 50%; background: rgba(6, 182, 212, 0.15); color: #0891b2; }
-
-        /* Theme 8: School (Blue & Yellow) */
-        .theme-school .sphere-1 { top: -10%; right: -5%; width: 75vw; height: 75vw; background: radial-gradient(circle, #fef08a, #eab308); } 
-        .theme-school .sphere-2 { bottom: -15%; left: -10%; width: 85vw; height: 85vw; background: radial-gradient(circle, #bfdbfe, #1e3a8a); animation-delay: -5s; }
-        .theme-school .btn-primary { background-color: #1e3a8a; color: #fef08a; border: 1px solid #1e3a8a; } 
-        .theme-school .text-primary { color: #1e3a8a; }
-        .theme-school .border-primary { border-color: #1e3a8a; }
-        .theme-school .shape-card { border-radius: 20px; }
-        .theme-school .shape-btn, .theme-school .shape-input { border-radius: 12px; }
-        .theme-school .icon-box { border-radius: 12px; background: rgba(30, 58, 138, 0.15); color: #eab308; }
 
         .custom-bg-overlay { position: absolute; inset: 0; background: rgba(255, 255, 255, 0); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: 0.3s; }
         @keyframes pulse { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(10%, 5%) scale(1.1); } }
@@ -140,16 +82,16 @@
             transition: border-radius 0.4s ease, background 0.3s ease, backdrop-filter 0.3s ease; 
         }
         
+        .shape-card { border-radius: 20px; }
+        .shape-btn { border-radius: 12px; }
+        .shape-input { border-radius: 12px; }
+
         .glow-text { text-shadow: 0 0 15px rgba(255,255,255,1), 0 0 30px rgba(255,255,255,1), 0 0 5px rgba(255,255,255,0.8); }
         .text-shadow-none { text-shadow: none !important; }
-        
-        /* สลิป Canvas จะยกเลิกแสง Glow ของตัวอักษรเพื่อให้อ่านง่ายขึ้นในรูป */
-        #export-slip-canvas * { text-shadow: none !important; }
 
         .btn-press { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
         .btn-press:active { transform: scale(0.95); filter: brightness(0.9); }
 
-        /* Input Elements */
         .input-field { 
             width: 100%; padding: 14px 18px; 
             border: 1px solid rgba(255,255,255,0.4); border-top: 1px solid rgba(255, 255, 255, 0.7);
@@ -160,12 +102,10 @@
         }
         .input-field:focus { outline: none; background: rgba(255, 255, 255, 0.5); border-color: rgba(255,255,255,0.9); }
         .input-field option { background: #ffffff; color: #1e293b; }
-        .input-field:disabled { opacity: 0.6; cursor: not-allowed; }
 
         .scroll-fine::-webkit-scrollbar { width: 4px; }
         .scroll-fine::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 10px; }
 
-        /* Modals & Toasts */
         #toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(200%); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); color: #1e293b; border: 1px solid rgba(0, 0, 0, 0.05); padding: 14px 24px; border-radius: 100px; z-index: 10000; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); display: flex; align-items: center; justify-content: center; gap: 10px; white-space: nowrap; opacity: 0; visibility: hidden; }
         #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; visibility: visible; }
 
@@ -176,13 +116,14 @@
 
         .fade-in { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        @keyframes logo-bounce {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-        }
+        @keyframes logo-bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
         .logo-pulse { animation: logo-bounce 2s infinite ease-in-out; }
+        
+        .history-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out; }
+        .student-card-item.expanded .history-content { max-height: 500px; }
+        
         section { transition: none !important; transform: none !important; animation: none !important; }
+        #export-canvas * { text-shadow: none !important; }
     </style>
 </head>
 <body class="flex flex-col items-center min-h-screen pt-[max(env(safe-area-inset-top),1rem)]" id="app-body">
@@ -195,27 +136,10 @@
 
     <div id="toast"><span id="toast-icon"></span><span id="toast-message" class="font-extrabold tracking-wide text-shadow-none"></span></div>
 
-    <!-- PWA Install Modal -->
-    <div id="pwa-install-modal" class="modal-bg">
-        <div class="modal-box shape-card flex flex-col items-center justify-center">
-            <div class="w-16 h-16 icon-box flex items-center justify-center text-3xl mb-4 !bg-blue-100 !text-blue-500 !border-0 text-shadow-none">
-                <i class="fa-solid fa-mobile-screen-button"></i>
-            </div>
-            <h3 class="text-2xl font-black text-accent mb-2 glow-text text-center w-full">ติดตั้งเป็นแอป</h3>
-            <div class="text-[14px] text-slate-600 font-medium mb-6 text-shadow-none leading-relaxed text-center w-full" id="pwa-install-desc">
-                คุณสามารถติดตั้งแอปนี้ลงในเครื่องเพื่อให้เรียกใช้งานง่ายขึ้น และรองรับการทำงานแบบออฟไลน์
-            </div>
-            <div class="flex gap-3 w-full">
-                <button id="btn-pwa-cancel" onclick="document.getElementById('pwa-install-modal').classList.remove('active')" class="flex-1 flex items-center justify-center btn-press bg-slate-200 !text-slate-700 font-black py-3.5 shape-btn text-shadow-none">ไว้คราวหน้า</button>
-                <button id="btn-pwa-install" class="flex-1 flex items-center justify-center btn-press bg-blue-600 !text-white font-black py-3.5 shape-btn shadow-lg shadow-blue-600/30 text-shadow-none">ติดตั้งแอป</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Confirm Modal -->
     <div id="confirm-modal" class="modal-bg">
         <div class="modal-box shape-card flex flex-col items-center justify-center">
-            <div class="w-16 h-16 icon-box flex items-center justify-center text-3xl mb-4 !bg-red-100 !text-red-500 !border-0 text-shadow-none">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center text-3xl mb-4 bg-red-100 text-red-500 text-shadow-none">
                 <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
             <h3 class="text-2xl font-black text-accent mb-2 glow-text text-center w-full" id="confirm-title">ยืนยัน</h3>
@@ -227,18 +151,18 @@
         </div>
     </div>
 
-    <!-- Teacher PIN Modal (ล็อคเฉพาะเมนูบันทึกคะแนน) -->
+    <!-- PIN Input Modal -->
     <div id="pin-modal" class="modal-bg">
-        <div class="modal-box shape-card flex flex-col items-center justify-center text-center">
-            <div class="w-16 h-16 icon-box flex items-center justify-center text-3xl mb-4 !bg-amber-100 !text-amber-500 !border-0 text-shadow-none">
+        <div class="modal-box shape-card flex flex-col items-center justify-center">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center text-3xl mb-4 bg-blue-100 text-blue-600 text-shadow-none">
                 <i class="fa-solid fa-lock"></i>
             </div>
-            <h3 class="text-2xl font-black text-accent mb-2 glow-text w-full">เฉพาะครูผู้สอน</h3>
-            <p class="text-[14px] text-slate-600 font-medium mb-5 text-shadow-none w-full">กรุณาใส่รหัสผ่านเพื่อแก้ไขคะแนน</p>
-            <input type="password" id="pin-input" class="input-field shape-input text-center text-2xl tracking-[0.5em] mb-5 font-inter" placeholder="****" maxlength="6">
+            <h3 class="text-xl font-black text-accent mb-2 glow-text text-center w-full">ใส่รหัสผ่านครูผู้สอน</h3>
+            <p class="text-[13px] text-slate-500 font-bold mb-4 text-shadow-none text-center w-full">เพื่อความปลอดภัย กรุณาใส่รหัสยืนยัน</p>
+            <input type="password" id="teacher-pin-input" class="input-field shape-input text-center text-2xl tracking-widest font-black mb-4 shadow-inner" placeholder="••••••" maxlength="6" inputmode="numeric" pattern="[0-9]*">
             <div class="flex gap-3 w-full text-shadow-none">
-                <button onclick="closePinModal()" class="flex-1 flex items-center justify-center btn-press bg-slate-200 text-slate-600 font-bold py-3.5 shape-btn">ยกเลิก</button>
-                <button onclick="verifyPin()" class="flex-1 flex items-center justify-center btn-press bg-amber-500 text-white font-bold py-3.5 shape-btn shadow-lg shadow-amber-500/30">ยืนยัน</button>
+                <button onclick="closePinModal()" class="flex-1 flex items-center justify-center btn-press bg-slate-200 text-slate-600 font-bold py-3 shape-btn">ยกเลิก</button>
+                <button onclick="verifyPin()" class="flex-1 flex items-center justify-center btn-press bg-blue-600 text-white font-bold py-3 shape-btn shadow-lg shadow-blue-600/30">ยืนยัน</button>
             </div>
         </div>
     </div>
@@ -247,18 +171,16 @@
         
         <!-- ================= VIEW 0: SPLASH SCREEN ================= -->
         <section id="view-splash" class="flex flex-col items-center justify-center flex-1 min-h-[70vh] w-full select-none">
-            <div class="w-32 h-32 bg-white rounded-full shadow-2xl flex items-center justify-center mb-6 logo-pulse p-3 border border-slate-100/50">
-                <img src="https://cdn-icons-png.flaticon.com/512/2940/2940653.png" class="w-24 h-24 object-contain rounded-full relative z-10" alt="logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3596/3596091.png'">
-            </div>
+            <div class="w-32 h-32 bg-white rounded-full shadow-2xl flex items-center justify-center mb-6 logo-pulse p-3 border border-slate-100/50 app-logo-container"></div>
             <h1 class="text-[34px] font-black text-accent leading-none tracking-tight glow-text text-center w-full">ระบบคะแนน</h1>
-            <p class="text-[16px] font-extrabold text-slate-600 mt-2 tracking-wide opacity-90 glow-text text-center w-full">บันทึกความประพฤติ</p>
+            <p class="text-[16px] font-extrabold text-slate-600 mt-2 tracking-wide opacity-90 glow-text text-center w-full app-school-name-display">กำลังโหลด...</p>
             <div class="mt-8 flex items-center justify-center gap-2 bg-white/40 px-4 py-2 rounded-full border border-white/50 shadow-sm backdrop-blur-sm">
                 <i class="fa-solid fa-compact-disc fa-spin text-primary text-sm"></i>
-                <span class="text-[12px] font-bold text-slate-600">กำลังโหลดข้อมูลล่าสุด...</span>
+                <span class="text-[12px] font-bold text-slate-600">กำลังเชื่อมต่อฐานข้อมูล...</span>
             </div>
         </section>
 
-        <!-- ================= VIEW 1: HOME/MAIN MENU ================= -->
+        <!-- ================= VIEW 1: HOME ================= -->
         <section id="view-home" class="hidden flex flex-col items-center justify-center flex-1">
             <header class="text-center mb-10 w-full flex flex-col items-center">
                 <div class="w-24 h-24 bg-white rounded-full shadow-2xl flex items-center justify-center mb-6 relative overflow-hidden group app-logo-container logo-pulse p-2 border border-slate-100"></div>
@@ -268,64 +190,53 @@
 
             <div class="glass-panel shape-card w-full p-8 text-center relative flex flex-col items-center">
                 <div id="action-buttons-container" class="flex flex-col gap-3 w-full">
-                    
                     <button onclick="switchView('view-dashboard')" class="btn-press w-full btn-primary font-black text-lg py-4.5 shape-btn shadow-xl flex items-center justify-center gap-3 text-shadow-none">
-                        <i class="fa-solid fa-chart-columns text-xl"></i> เช็คคะแนน (นักเรียน)
+                        <i class="fa-solid fa-magnifying-glass-chart text-xl"></i> เช็คคะแนน (นักเรียน)
                     </button>
-                    
-                    <button onclick="requestTeacherAccess('form')" class="flex btn-press w-full bg-emerald-500 text-white font-black text-lg py-4.5 shape-btn shadow-xl items-center justify-center gap-3 text-shadow-none">
-                        <i class="fa-solid fa-file-circle-plus text-xl"></i> ตัด/เพิ่มคะแนน (ครู)
+                    <button onclick="openFormWithPin()" class="flex btn-press w-full bg-emerald-500 text-white font-black text-lg py-4.5 shape-btn shadow-xl items-center justify-center gap-3 text-shadow-none">
+                        <i class="fa-solid fa-user-shield text-xl"></i> แก้ไขคะแนน (ครู)
                     </button>
-
                     <div class="grid grid-cols-2 gap-3 w-full mt-2">
                         <button onclick="switchView('view-criteria')" class="btn-press w-full bg-accent text-white font-bold py-3.5 shape-btn shadow-lg flex items-center justify-center gap-2 text-shadow-none">
                             <i class="fa-solid fa-gavel text-white/70"></i> เกณฑ์คะแนน
                         </button>
-                        <!-- เอา requestTeacherAccess ออก ให้ใครก็เข้าตั้งค่าได้ตามคำขอ -->
                         <button onclick="openSettingsView()" class="btn-press w-full bg-white/70 text-slate-700 font-bold py-3.5 shape-btn border border-white flex items-center justify-center gap-2 text-shadow-none">
                             <i class="fa-solid fa-gear text-slate-400"></i> ตั้งค่าแอป
                         </button>
                     </div>
-
                 </div>
                 
-                <!-- System Error Message -->
                 <div id="system-error-msg" class="hidden text-red-600 text-[14px] mt-6 font-black bg-red-50/80 p-5 shape-card border border-red-100 text-shadow-none w-full text-left">
-                    <div class="flex items-center gap-2 mb-2 text-red-700">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                        <span>ไม่สามารถโหลดข้อมูลได้</span>
-                    </div>
+                    <div class="flex items-center gap-2 mb-2 text-red-700"><i class="fa-solid fa-triangle-exclamation"></i><span>ไม่สามารถโหลดข้อมูลได้</span></div>
                     <div id="error-details" class="font-bold text-[12px] text-red-500/80 leading-relaxed"></div>
-                    <button onclick="window.location.reload()" class="mt-4 text-[12px] bg-white border border-red-200 px-4 py-2 shape-btn text-red-600 hover:bg-red-50 transition w-full">ลองใหม่อีกครั้ง</button>
+                    <button onclick="window.location.reload()" class="mt-4 text-[12px] bg-white border border-red-200 px-4 py-2 shape-btn text-red-600 w-full">ลองใหม่อีกครั้ง</button>
                 </div>
             </div>
         </section>
 
-        <!-- ================= VIEW 2: DASHBOARD ================= -->
+        <!-- ================= VIEW 2: DASHBOARD (STUDENT VIEW) ================= -->
         <section id="view-dashboard" class="hidden flex flex-col flex-1 h-full w-full">
             <div class="flex items-center justify-between mb-4 shrink-0 px-1">
                 <div class="flex items-center">
                     <button class="w-11 h-11 glass-panel shape-btn flex items-center justify-center text-slate-600 mr-4 btn-press shadow-sm text-shadow-none" onclick="switchView('view-home')">
                         <i class="fa-solid fa-arrow-left text-lg"></i>
                     </button>
-                    <h2 class="text-[28px] font-black text-accent tracking-tighter leading-none glow-text">ภาพรวมคะแนน</h2>
+                    <h2 class="text-[28px] font-black text-accent tracking-tighter leading-none glow-text">ตรวจสอบคะแนน</h2>
                 </div>
             </div>
             
             <div class="mb-4 shrink-0 w-full px-1">
                 <div class="relative w-full">
                     <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" id="searchStudent" class="input-field shape-input w-full pl-11" placeholder="พิมพ์ชื่อเพื่อค้นหา..." onkeyup="filterDashboard()">
+                    <input type="text" id="searchStudent" class="input-field shape-input w-full pl-11 shadow-sm" placeholder="ค้นหาชื่อ หรือ นามสกุล..." onkeyup="filterDashboard()">
                 </div>
-                <p class="text-[11px] text-slate-600 font-bold mt-3 text-center glow-text"><i class="fa-solid fa-hand-pointer mr-1 text-slate-400"></i> แตะที่ชื่อเพื่อดูรายละเอียดและโหลดสลิป</p>
+                <p class="text-[10px] text-slate-500 mt-2 font-bold text-center glow-text">*แตะที่การ์ดรายชื่อเพื่อดูประวัติการตัดคะแนน</p>
             </div>
             
-            <div class="overflow-y-auto scroll-fine flex-1 space-y-3 px-1 pb-10" id="dashboard-container">
-                <!-- Cards injected here -->
-            </div>
+            <div class="overflow-y-auto scroll-fine flex-1 space-y-3 px-1 pb-10" id="dashboard-container"></div>
         </section>
 
-        <!-- ================= VIEW 3: RECORD FORM ================= -->
+        <!-- ================= VIEW 3: RECORD FORM (TEACHER) ================= -->
         <section id="view-form" class="hidden flex flex-col flex-1 h-full w-full">
             <div class="flex items-center justify-between mb-4 shrink-0 px-1">
                 <div class="flex items-center">
@@ -352,11 +263,9 @@
 
                     <div class="glass-panel shape-card p-5">
                         <label class="text-[12px] font-black uppercase text-slate-700 mb-2 block tracking-widest glow-text">ฐานความผิด / รายการ</label>
-                        <select id="offenseSelect" class="input-field shape-input font-bold cursor-pointer mb-4" onchange="handleOffenseChange()" required>
-                            <!-- injected via js -->
-                        </select>
+                        <select id="offenseSelect" class="input-field shape-input font-bold cursor-pointer mb-4" onchange="handleOffenseChange()" required></select>
                         
-                        <label class="text-[12px] font-black uppercase text-slate-700 mb-2 block tracking-widest glow-text">คะแนน (ใช้เครื่องหมายลบ - สำหรับตัด)</label>
+                        <label class="text-[12px] font-black uppercase text-slate-700 mb-2 block tracking-widest glow-text">คะแนน (พิมพ์แก้ไขได้อิสระ ลบคือตัด)</label>
                         <input type="number" id="pointsInput" class="input-field shape-input font-black text-red-600" placeholder="ระบุคะแนน ตัวอย่าง: -5 หรือ 10" required>
                     </div>
 
@@ -366,9 +275,52 @@
                     </div>
 
                     <button type="submit" id="btn-submit-form" class="btn-press w-full btn-primary font-black text-lg py-4.5 shape-btn shadow-xl flex items-center justify-center gap-3 text-shadow-none mt-2">
-                        <i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลลงชีต
+                        <i class="fa-solid fa-floppy-disk"></i> อัปเดตคะแนน
                     </button>
                 </form>
+            </div>
+        </section>
+
+        <!-- ================= VIEW: SLIP EXPORT ================= -->
+        <section id="view-slip" class="hidden overflow-y-auto scroll-fine h-full">
+            <div class="flex items-center justify-between mb-6 px-1">
+                <div class="flex items-center">
+                    <button class="w-11 h-11 glass-panel shape-btn flex items-center justify-center text-slate-600 mr-4 btn-press shadow-sm text-shadow-none" onclick="switchView('view-dashboard')">
+                        <i class="fa-solid fa-arrow-left text-lg"></i>
+                    </button>
+                    <h2 class="text-[28px] font-black text-accent tracking-tighter leading-none glow-text">สลิปคะแนน</h2>
+                </div>
+            </div>
+            
+            <div id="export-canvas" class="relative shape-card shadow-lg text-left bg-white/95 backdrop-blur-md p-6 border border-slate-200 overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-primary"></div>
+                <i class="fa-solid fa-shield-halved absolute -right-6 -bottom-6 text-9xl opacity-5 text-slate-900 pointer-events-none"></i>
+                
+                <div class="text-center mb-5 mt-2 flex flex-col items-center justify-center">
+                    <div class="app-logo-container !w-16 !h-16 !mb-3 border-slate-200"></div>
+                    <p class="font-black text-accent/70 text-[12px] app-school-name-display text-center w-full uppercase tracking-wider">โรงเรียน</p>
+                    <h2 class="text-[22px] font-black text-primary leading-tight text-center w-full mt-1">รายงานคะแนนความประพฤติ</h2>
+                    <div class="text-[10px] font-black text-slate-500 bg-slate-100 inline-block px-4 py-1 rounded-full mt-2 border border-slate-200" id="export-slip-date"></div>
+                </div>
+                
+                <div class="bg-surface/80 rounded-[18px] p-4 border border-slate-200 space-y-2 mb-5 shadow-sm">
+                    <div class="flex justify-between items-center"><span class="font-bold text-slate-500 text-[14px]">ชื่อ-สกุล:</span><span class="font-black text-accent text-[14px]" id="export-slip-name"></span></div>
+                    <div class="flex justify-between items-center"><span class="font-bold text-slate-500 text-[14px]">สถานะ:</span><span class="font-black text-[12px] px-2.5 py-0.5 rounded shadow-sm border" id="export-slip-status"></span></div>
+                    <div class="flex justify-between items-center"><span class="font-bold text-slate-500 text-[14px]">คะแนนคงเหลือ:</span><span class="font-black text-[18px]" id="export-slip-score"></span></div>
+                </div>
+                
+                <h4 class="text-[12px] font-black text-slate-700 uppercase tracking-widest mb-3 border-b border-slate-200 pb-2"><i class="fa-solid fa-clock-rotate-left text-slate-400 mr-1"></i> สรุปประวัติทั้งหมด</h4>
+                <div id="export-slip-history" class="space-y-3 relative z-10 min-h-[100px]"></div>
+                
+                <div class="mt-6 pt-4 border-t border-dashed border-slate-300 text-center relative z-10">
+                    <p class="text-[10px] font-bold text-slate-400">สร้างเอกสารโดยระบบอัตโนมัติ</p>
+                </div>
+            </div>
+            
+            <div class="flex gap-3 mt-6 mb-12">
+                <button onclick="processImageExport()" class="flex-1 btn-press bg-blue-600 text-white font-black py-4 shape-btn shadow-xl shadow-blue-600/30 text-[15px] flex items-center justify-center gap-2 text-shadow-none">
+                    <i class="fa-solid fa-download"></i> บันทึกสลิป (รูปภาพ)
+                </button>
             </div>
         </section>
 
@@ -384,39 +336,23 @@
             </div>
             
             <div class="overflow-y-auto scroll-fine flex-1 space-y-4 px-1 pb-6">
-                
                 <div class="glass-panel shape-card p-5 border-l-4 border-l-red-500">
                     <h3 class="text-[14px] font-black text-red-600 uppercase tracking-widest mb-3 glow-text"><i class="fa-solid fa-triangle-exclamation"></i> มาตรการควบคุม</h3>
                     <div class="space-y-3">
-                        <div class="bg-white/50 p-3 rounded-xl shadow-sm text-[13px] border border-emerald-200">
-                            <span class="font-black text-emerald-600">มากกว่า 30 :</span> ปกติ / ปลอดภัย
-                        </div>
-                        <div class="bg-white/50 p-3 rounded-xl shadow-sm text-[13px] border border-amber-200">
-                            <span class="font-black text-amber-600">≤ 30 คะแนน :</span> เตือน/โทรแจ้งผู้ปกครอง
-                        </div>
-                        <div class="bg-white/50 p-3 rounded-xl shadow-sm text-[13px] border border-red-200">
-                            <span class="font-black text-red-600">≤ 0 คะแนน :</span> เชิญผู้ปกครอง / พักการเรียน
-                        </div>
+                        <div class="bg-white/50 p-3 rounded-xl shadow-sm text-[13px] border border-emerald-200"><span class="font-black text-emerald-600">มากกว่า 30 :</span> ปกติ / ปลอดภัย</div>
+                        <div class="bg-white/50 p-3 rounded-xl shadow-sm text-[13px] border border-amber-200"><span class="font-black text-amber-600">≤ 30 คะแนน :</span> เตือน/โทรแจ้งผู้ปกครอง</div>
+                        <div class="bg-white/50 p-3 rounded-xl shadow-sm text-[13px] border border-red-200"><span class="font-black text-red-600">≤ 0 คะแนน :</span> เชิญผู้ปกครอง / พักการเรียน</div>
                     </div>
                 </div>
-
                 <div class="glass-panel shape-card p-5">
                     <h3 class="text-[14px] font-black text-primary uppercase tracking-widest mb-3 glow-text"><i class="fa-solid fa-list-ol"></i> บัญชีเกณฑ์มาตรฐาน</h3>
                     <div class="overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white/50">
                         <table class="w-full text-left text-[13px] border-collapse" id="criteriaTable">
-                            <thead class="bg-accent text-white">
-                                <tr>
-                                    <th class="p-3 font-bold">รายการ / ฐานความผิด</th>
-                                    <th class="p-3 font-bold text-center w-24">คะแนน</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-200/50">
-                                <!-- injected via js -->
-                            </tbody>
+                            <thead class="bg-accent text-white"><tr><th class="p-3 font-bold">รายการ / ฐานความผิด</th><th class="p-3 font-bold text-center w-24">คะแนน</th></tr></thead>
+                            <tbody class="divide-y divide-slate-200/50"></tbody>
                         </table>
                     </div>
                 </div>
-
             </div>
         </section>
 
@@ -432,68 +368,28 @@
             </div>
             
             <div class="overflow-y-auto scroll-fine px-1 pb-6 flex-1 space-y-4">
-                
                 <div class="glass-panel shape-card p-5">
-                    <h3 class="text-[13px] font-black text-primary uppercase tracking-widest mb-4 flex items-center gap-2 text-shadow-none"><i class="fa-solid fa-school"></i> ข้อมูลโรงเรียน / โลโก้</h3>
+                    <h3 class="text-[13px] font-black text-primary uppercase tracking-widest mb-4 flex items-center gap-2 text-shadow-none"><i class="fa-solid fa-school"></i> ข้อมูลโรงเรียน</h3>
                     <input type="text" id="set-school-name" class="input-field shape-input mb-4" placeholder="ชื่อโรงเรียน" value="ระบบคะแนนความประพฤติ">
-                    
                     <div class="border-t border-white/30 pt-4">
                         <label class="text-[12px] font-bold text-slate-700 glow-text mb-2 block">เปลี่ยนตราโลโก้</label>
                         <input type="file" id="set-logo-upload" accept="image/*" class="hidden">
                         <div class="flex gap-2">
-                            <button onclick="document.getElementById('set-logo-upload').click()" class="bg-white text-slate-700 font-bold px-3 py-2.5 shape-btn text-xs flex-1 border border-slate-200 shadow-sm text-shadow-none flex items-center justify-center"><i class="fa-solid fa-upload mr-1"></i> อัปโหลดใหม่</button>
-                            <button onclick="clearCustomLogo()" class="bg-red-50 text-red-500 font-bold px-3 py-2.5 shape-btn text-xs flex-1 border border-red-100 text-shadow-none flex items-center justify-center"><i class="fa-solid fa-rotate-left mr-1"></i> ใช้รูประบบ</button>
+                            <button onclick="document.getElementById('set-logo-upload').click()" class="bg-white text-slate-700 font-bold px-3 py-2.5 shape-btn text-xs flex-1 border border-slate-200 shadow-sm text-shadow-none"><i class="fa-solid fa-upload mr-1"></i> อัปโหลดใหม่</button>
+                            <button onclick="clearCustomLogo()" class="bg-red-50 text-red-500 font-bold px-3 py-2.5 shape-btn text-xs flex-1 border border-red-100 text-shadow-none"><i class="fa-solid fa-rotate-left mr-1"></i> ใช้รูประบบ</button>
                         </div>
                     </div>
                 </div>
-
                 <div class="glass-panel shape-card p-5">
-                    <h3 class="text-[13px] font-black text-primary uppercase tracking-widest mb-4 flex items-center gap-2 text-shadow-none"><i class="fa-solid fa-palette"></i> ธีมแอปพลิเคชัน</h3>
+                    <h3 class="text-[13px] font-black text-primary uppercase tracking-widest mb-4 flex items-center gap-2 text-shadow-none"><i class="fa-solid fa-palette"></i> ธีมสีแอป</h3>
                     <select id="set-bg-theme" class="input-field shape-input cursor-pointer">
                         <option value="theme-amber">Amber Glow (อำพัน)</option>
                         <option value="theme-blue">Ocean Blue (สีฟ้า)</option>
                         <option value="theme-emerald">Emerald Fresh (สีเขียว)</option>
                         <option value="theme-rose">Rose Quartz (ชมพู-แดง)</option>
-                        <option value="theme-violet">Violet Royal (สีม่วง)</option>
                         <option value="theme-slate">Slate Pro (สีเทา-ดำ)</option>
-                        <option value="theme-cyan">Cyan Modern (ฟ้าอมเขียว)</option>
-                        <option value="theme-school">สีประจำโรงเรียน (น้ำเงิน-เหลือง)</option>
                     </select>
                 </div>
-
-                <div class="glass-panel shape-card p-5">
-                    <h3 class="text-[13px] font-black text-primary uppercase tracking-widest mb-4 flex items-center gap-2 text-shadow-none"><i class="fa-solid fa-image"></i> ภาพพื้นหลัง (Wallpaper)</h3>
-                    <input type="file" id="set-bg-upload" accept="image/*" class="hidden">
-                    <div class="flex gap-2 mb-4">
-                        <button onclick="document.getElementById('set-bg-upload').click()" class="bg-white text-slate-700 font-bold px-4 py-2 shape-btn text-xs flex-1 border border-slate-200 shadow-sm text-shadow-none flex items-center justify-center"><i class="fa-solid fa-image mr-1"></i> เลือกรูป</button>
-                        <button onclick="clearCustomBackground()" class="bg-red-50 text-red-500 font-bold px-4 py-2 shape-btn text-xs flex-1 border border-red-100 text-shadow-none flex items-center justify-center"><i class="fa-solid fa-trash mr-1"></i> นำรูปออก</button>
-                    </div>
-
-                    <div class="mb-4 pt-4 border-t border-white/30">
-                        <div class="flex justify-between items-center mb-2">
-                            <label class="text-[12px] font-bold text-slate-700 glow-text">ความเบลอฉากหลัง</label>
-                            <span id="display-bg-blur" class="text-[12px] font-black text-primary bg-white/50 px-2 py-0.5 rounded-md text-shadow-none">50%</span>
-                        </div>
-                        <input type="range" id="set-bg-blur" min="0" max="100" value="50" class="w-full" oninput="previewBgBlur(this.value)">
-                    </div>
-
-                    <div class="mb-4 pt-4 border-t border-white/30">
-                        <div class="flex justify-between items-center mb-2">
-                            <label class="text-[12px] font-bold text-slate-700 glow-text">ความทึบของการ์ด</label>
-                            <span id="display-card-opacity" class="text-[12px] font-black text-primary bg-white/50 px-2 py-0.5 rounded-md text-shadow-none">15%</span>
-                        </div>
-                        <input type="range" id="set-card-opacity" min="0" max="100" value="15" class="w-full" oninput="previewCardOpacity(this.value)">
-                    </div>
-
-                    <div class="mb-2 pt-4 border-t border-white/30">
-                        <div class="flex justify-between items-center mb-2">
-                            <label class="text-[12px] font-bold text-slate-700 glow-text">ความเบลอของการ์ด</label>
-                            <span id="display-card-blur" class="text-[12px] font-black text-primary bg-white/50 px-2 py-0.5 rounded-md text-shadow-none">25px</span>
-                        </div>
-                        <input type="range" id="set-card-blur" min="0" max="50" value="25" class="w-full" oninput="previewCardBlur(this.value)">
-                    </div>
-                </div>
-
             </div>
             <div class="pt-4 shrink-0 px-1">
                 <button onclick="saveSettings()" class="btn-press w-full btn-primary font-black py-4.5 shape-btn shadow-xl text-lg flex items-center justify-center gap-2 text-shadow-none">
@@ -501,263 +397,88 @@
                 </button>
             </div>
         </section>
-
-        <!-- ================= VIEW 6: SLIP (ใบรายงานผลนักเรียน) ================= -->
-        <section id="view-slip" class="hidden flex-col flex-1 h-full w-full overflow-hidden">
-            <div class="flex items-center justify-between mb-4 shrink-0 px-1">
-                <div class="flex items-center">
-                    <button class="w-11 h-11 glass-panel shape-btn flex items-center justify-center text-slate-600 mr-4 btn-press shadow-sm text-shadow-none" onclick="switchView('view-dashboard')">
-                        <i class="fa-solid fa-arrow-left text-lg"></i>
-                    </button>
-                    <h2 class="text-[28px] font-black text-accent tracking-tighter leading-none glow-text">สลิปคะแนน</h2>
-                </div>
-            </div>
-            
-            <div class="overflow-y-auto scroll-fine px-1 pb-6 flex-1">
-                <div id="export-slip-canvas" class="relative shape-card shadow-lg text-left bg-white/95 backdrop-blur-md p-6 border border-slate-200 overflow-hidden mb-6">
-                    <div id="slip-top-border" class="absolute top-0 left-0 w-full h-2 bg-primary"></div>
-                    <i class="fa-solid fa-shield-halved absolute -right-6 -bottom-6 text-9xl opacity-5 text-slate-900 pointer-events-none"></i>
-                    
-                    <div class="text-center mb-5 pt-2 flex flex-col items-center justify-center">
-                        <div class="app-slip-logo-container mb-3.5"></div>
-                        <p class="font-black text-accent/70 text-[13px] app-school-name-display text-center w-full uppercase tracking-wider">โรงเรียน</p>
-                        <h2 class="text-[22px] font-black text-primary leading-tight text-center w-full mt-1" id="slip-title">รายงานความประพฤติ</h2>
-                        <div class="text-[11px] font-black text-slate-600 bg-slate-100 inline-block px-4 py-1 rounded-full mt-2 border border-slate-200 text-center shadow-inner" id="export-slip-date"></div>
-                    </div>
-                    
-                    <div class="bg-surface/80 rounded-[18px] p-4 border border-slate-200 space-y-2 mb-5 shadow-sm">
-                        <div class="flex justify-between items-center"><span class="font-bold text-slate-500 text-[14px]">ชื่อ-สกุล:</span><span class="font-black text-accent text-[14px]" id="export-slip-name"></span></div>
-                        <div class="flex justify-between items-center"><span class="font-bold text-slate-500 text-[14px]">สถานะ:</span><span class="font-black text-[12px] px-2.5 py-0.5 rounded shadow-sm border" id="export-slip-status"></span></div>
-                        <div class="flex justify-between items-center"><span class="font-bold text-slate-500 text-[14px]">คะแนนคงเหลือ:</span><span class="font-black text-[18px]" id="export-slip-score"></span></div>
-                    </div>
-                    
-                    <h4 id="slip-history-header" class="text-[12px] font-black text-slate-700 uppercase tracking-widest mb-3 border-b border-slate-200 pb-2"><i class="fa-solid fa-clock-rotate-left text-slate-400 mr-1"></i> สรุปประวัติทั้งหมด</h4>
-                    <div id="export-slip-history" class="space-y-3 relative z-10 min-h-[100px]"></div>
-                    
-                    <div class="mt-6 pt-4 border-t border-dashed border-slate-300 text-center relative z-10">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center w-full">ออกเอกสารโดยระบบอัตโนมัติ</p>
-                    </div>
-                </div>
-                
-                <div class="flex gap-3 mb-12">
-                    <button onclick="processImageExport('export-slip-canvas', 'สลิปคะแนน')" class="flex-1 btn-press bg-emerald-500 text-white font-black py-4 shape-btn shadow-xl shadow-emerald-500/30 text-[15px] flex items-center justify-center gap-2 text-shadow-none">
-                        <i class="fa-solid fa-download"></i> ดาวน์โหลดและแชร์รูปภาพ
-                    </button>
-                </div>
-            </div>
-        </section>
     </main>
 
     <script>
         // ==========================================
-        // จุดที่สำคัญที่สุด! 
-        // URL จาก Apps Script ถูกใส่ไว้เรียบร้อยแล้ว
+        // ตั้งค่าระบบ
         // ==========================================
-        const CONFIG = {
-            GAS_URL: "https://script.google.com/macros/s/AKfycbzXOpgeURgwV8IcZFIFJtx5M1oKbs3eDFXr-XRh1ZCmPe3E8ia__PGh3FLDoiotDJ_n/exec" 
-        };
-
+        const CONFIG = { GAS_URL: "https://script.google.com/macros/s/AKfycbzXOpgeURgwV8IcZFIFJtx5M1oKbs3eDFXr-XRh1ZCmPe3E8ia__PGh3FLDoiotDJ_n/exec" };
         const TEACHER_PIN = "242569";
-        let targetViewAfterPin = "";
 
-        // ฐานความผิดทั้งหมด
         const offenseList = [
-            { text: "-- เลือกฐานความผิด/รายการ --", value: "", points: "", editable: false },
-            { text: "ขาดเรียนไม่มีใบลา (ขร) [-10]", value: "ขาดเรียนไม่มีใบลา(ขร)", points: -10, editable: false },
-            { text: "ขาดแถว (ส) [-5]", value: "ขาดแถว(ส)", points: -5, editable: false },
-            { text: "สายแถว (สถ) [-3]", value: "สายแถว(สถ)", points: -3, editable: false },
-            { text: "โดดเรียน [-5]", value: "โดดเรียน", points: -5, editable: false },
-            { text: "แสดงกิริยาก้าวร้าว [-30]", value: "แสดงกิริยาก้าวร้าว", points: -30, editable: false },
-            { text: "ทะเลาะวิวาท [-30]", value: "ทะเลาะวิวาท", points: -30, editable: false },
-            { text: "ชู้สาว/เบี่ยงเบนทางเพศ (*ดุลพินิจ)", value: "ชู้สาว/เบี่ยงเบนทางเพศ", points: 0, editable: true },
-            { text: "หนีออกนอกโรงเรียน (*ดุลพินิจ)", value: "หนีออกนอกโรงเรียน", points: 0, editable: true },
-            { text: "ยาเสพติด (*ดุลพินิจ)", value: "ยาเสพติด", points: 0, editable: true },
-            { text: "โทรศัพท์ (*ดุลพินิจ)", value: "โทรศัพท์", points: 0, editable: true },
-            { text: "ทำลายทรัพย์สินโรงเรียน (ชดใช้ค่าเสียหาย) [-20 ถึง -70]", value: "ทำลายทรัพย์สินโรงเรียน", points: -20, editable: true },
-            { text: "มาโรงเรียนสาย [-5]", value: "มาโรงเรียนสาย", points: -5, editable: false },
-            { text: "ขาดละหมาด [-5]", value: "ขาดละหมาด", points: -5, editable: false },
-            { text: "ทำความดี / กู้คะแนน (*ดุลพินิจ) [+]", value: "ทำความดี/กู้คะแนน", points: 0, editable: true },
-            { text: "อื่นๆ", value: "อื่นๆ", points: 0, editable: true }
+            { text: "-- เลือกฐานความผิด/รายการ --", value: "", points: "" },
+            { text: "ขาดเรียนไม่มีใบลา", value: "ขาดเรียนไม่มีใบลา", points: -10 },
+            { text: "ขาดแถว", value: "ขาดแถว", points: -5 },
+            { text: "สายแถว", value: "สายแถว", points: -3 },
+            { text: "โดดเรียน", value: "โดดเรียน", points: -5 },
+            { text: "แสดงกิริยาก้าวร้าว", value: "แสดงกิริยาก้าวร้าว", points: -30 },
+            { text: "ทะเลาะวิวาท", value: "ทะเลาะวิวาท", points: -30 },
+            { text: "ชู้สาว/เบี่ยงเบนทางเพศ", value: "ชู้สาว/เบี่ยงเบนทางเพศ", points: 0 },
+            { text: "หนีออกนอกโรงเรียน", value: "หนีออกนอกโรงเรียน", points: 0 },
+            { text: "ยาเสพติด", value: "ยาเสพติด", points: 0 },
+            { text: "โทรศัพท์", value: "โทรศัพท์", points: 0 },
+            { text: "ทำลายทรัพย์สินโรงเรียน", value: "ทำลายทรัพย์สินโรงเรียน", points: -20 },
+            { text: "มาโรงเรียนสาย", value: "มาโรงเรียนสาย", points: -5 },
+            { text: "ขาดละหมาด", value: "ขาดละหมาด", points: -5 },
+            { text: "ทำความดี / กู้คะแนน", value: "ทำความดี/กู้คะแนน", points: 0 },
+            { text: "อื่นๆ", value: "อื่นๆ", points: 0 }
         ];
 
         let cachedStudents = [];
+        let pinTargetView = null; // ตัวแปรเก็บหน้าที่อยากจะไปหลังรหัสผ่านผ่าน
 
-        // การตั้งค่าแอปเบื้องต้น
-        const DEFAULT_PREFS = { 
-            schoolName: "ระบบคะแนนความประพฤติ", 
-            schoolLogo: "ส.ธ.", 
-            customLogo: "https://cdn-icons-png.flaticon.com/512/2940/2940653.png", 
-            theme: "theme-amber", 
-            customBg: null,
-            customBgBlur: 50,
-            cardOpacity: 15,
-            cardBlur: 25
-        };
-        
+        const DEFAULT_PREFS = { schoolName: "ระบบคะแนนความประพฤติ", schoolLogo: "ส.ธ.", customLogo: "https://cdn-icons-png.flaticon.com/512/2940/2940653.png", theme: "theme-slate", customBgBlur: 50, cardOpacity: 15, cardBlur: 25 };
         let earlyPrefs = JSON.parse(localStorage.getItem('behaviorApp_prefs')) || DEFAULT_PREFS;
         if(earlyPrefs.customLogo === undefined || earlyPrefs.customLogo === null) earlyPrefs.customLogo = "https://cdn-icons-png.flaticon.com/512/2940/2940653.png";
-        if(earlyPrefs.cardOpacity === undefined) earlyPrefs.cardOpacity = 15;
-        if(earlyPrefs.cardBlur === undefined) earlyPrefs.cardBlur = 25;
-        if(earlyPrefs.customBgBlur === undefined) earlyPrefs.customBgBlur = 50;
 
         function applyPrefs() {
-            document.documentElement.style.setProperty('--glass-opacity', earlyPrefs.cardOpacity / 100);
-            document.documentElement.style.setProperty('--glass-blur', earlyPrefs.cardBlur + 'px');
-            
-            const appBody = document.getElementById('app-body');
-            if(appBody) appBody.className = `flex flex-col items-center min-h-screen pt-[max(env(safe-area-inset-top),1rem)] ${earlyPrefs.theme}`;
-            
-            const metaTheme = document.getElementById('meta-theme-color');
-            if (metaTheme) {
-                if (earlyPrefs.customBg) {
-                    metaTheme.setAttribute('content', 'transparent'); 
-                } else {
-                    const THEME_COLORS = {
-                        "theme-amber": "#fef3c7", "theme-blue": "#e0f2fe", "theme-emerald": "#dcfce7",
-                        "theme-rose": "#ffe4e6", "theme-violet": "#f3e8ff", "theme-slate": "#cbd5e1",
-                        "theme-cyan": "#cffafe", "theme-school": "#fef08a"
-                    };
-                    metaTheme.setAttribute('content', THEME_COLORS[earlyPrefs.theme] || 'transparent');
-                }
-            }
-
+            document.documentElement.style.setProperty('--glass-opacity', (earlyPrefs.cardOpacity||15) / 100);
+            document.documentElement.style.setProperty('--glass-blur', (earlyPrefs.cardBlur||25) + 'px');
+            document.getElementById('app-body').className = `flex flex-col items-center min-h-screen pt-[max(env(safe-area-inset-top),1rem)] ${earlyPrefs.theme}`;
             document.querySelectorAll('.app-school-name-display').forEach(el => el.innerText = earlyPrefs.schoolName);
-            
             document.querySelectorAll('.app-logo-container').forEach(container => {
-                container.className = "w-24 h-24 bg-white rounded-full shadow-2xl flex items-center justify-center mb-6 relative overflow-hidden group app-logo-container logo-pulse p-2 border border-slate-100";
-                if(earlyPrefs.customLogo) {
-                    container.innerHTML = `<img src="${earlyPrefs.customLogo}" class="w-20 h-20 object-contain rounded-full relative z-10" alt="logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3596/3596091.png'">`;
-                } else {
-                    container.innerHTML = `<span class="text-[40px] font-black text-primary tracking-tighter relative z-10 app-logo-display text-shadow-none">${earlyPrefs.schoolLogo}</span>`;
-                }
+                if(earlyPrefs.customLogo) container.innerHTML = `<img src="${earlyPrefs.customLogo}" class="w-full h-full object-contain rounded-full relative z-10 p-1">`;
+                else container.innerHTML = `<span class="text-3xl font-black text-primary">${earlyPrefs.schoolLogo}</span>`;
             });
-            
-            const bgContainer = document.getElementById('bg-container');
-            const overlay = document.getElementById('custom-bg-overlay');
-            const s1 = document.getElementById('def-sphere-1');
-            const s2 = document.getElementById('def-sphere-2');
-            
-            if(bgContainer && overlay && s1 && s2) {
-                if(earlyPrefs.customBg) {
-                    bgContainer.style.backgroundImage = `url(${earlyPrefs.customBg})`;
-                    let blurVal = earlyPrefs.customBgBlur !== undefined ? earlyPrefs.customBgBlur : 50;
-                    overlay.style.backdropFilter = `blur(${blurVal / 5}px)`;
-                    overlay.style.webkitBackdropFilter = `blur(${blurVal / 5}px)`;
-                    overlay.style.background = `rgba(255,255,255,${(blurVal / 100) * 0.4})`;
-                    overlay.classList.remove('hidden');
-                    s1.style.display = 'none'; s2.style.display = 'none';
-                } else {
-                    bgContainer.style.backgroundImage = 'none';
-                    overlay.classList.add('hidden');
-                    s1.style.display = 'block'; s2.style.display = 'block';
-                }
-            }
         }
 
-        // ==========================================
-        // โค้ดหลักเมื่อหน้าเว็บโหลดเสร็จ
-        // ==========================================
         document.addEventListener('DOMContentLoaded', () => {
-            const uploadEl = document.getElementById('set-bg-upload');
-            if(uploadEl) uploadEl.addEventListener('change', handleImageUpload);
-
-            const logoUploadEl = document.getElementById('set-logo-upload');
-            if(logoUploadEl) logoUploadEl.addEventListener('change', handleLogoUpload);
-            
-            checkPwaInstall();
+            const uploadEl = document.getElementById('set-logo-upload');
+            if(uploadEl) uploadEl.addEventListener('change', handleLogoUpload);
             initOffenses();
-            fetchStudentData(); 
+            fetchStudentData();
             applyPrefs();
-            setupPWA();
         });
 
-        // ------------------ ระบบรหัสผ่าน ------------------
-        function requestTeacherAccess(viewTarget) {
-            targetViewAfterPin = viewTarget;
-            document.getElementById('pin-input').value = '';
+        // ------------------ PIN SYSTEM ------------------
+        function openFormWithPin() {
+            pinTargetView = 'view-form';
+            document.getElementById('teacher-pin-input').value = "";
             document.getElementById('pin-modal').classList.add('active');
-            setTimeout(() => document.getElementById('pin-input').focus(), 300);
+            setTimeout(() => document.getElementById('teacher-pin-input').focus(), 100);
         }
-
         function closePinModal() {
             document.getElementById('pin-modal').classList.remove('active');
+            // สำคัญ: ห้ามรีเซ็ต pinTargetView ที่นี่ทันที เดี๋ยวระบบเปลี่ยนหน้าไม่ทำงาน
         }
-
         function verifyPin() {
-            const input = document.getElementById('pin-input').value;
-            if (input === TEACHER_PIN) {
-                const target = targetViewAfterPin; 
-                closePinModal();
-                if (target === 'form') openFormView();
-            } else {
-                showToast("รหัสผ่านไม่ถูกต้อง", "fa-solid fa-lock text-red-500");
-                document.getElementById('pin-input').value = '';
-            }
-        }
-
-        // ------------------ PWA SETUP ------------------
-        function setupPWA() {
-            const manifestObj = {
-                "name": "ระบบบันทึกคะแนนความประพฤติ",
-                "short_name": "บันทึกคะแนน",
-                "start_url": window.location.href,
-                "display": "standalone",
-                "background_color": "#0f172a",
-                "theme_color": "#1e3a8a",
-                "icons": [{ "src": "https://cdn-icons-png.flaticon.com/512/2940/2940653.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }]
-            };
-            const blobJson = new Blob([JSON.stringify(manifestObj)], {type: 'application/json'});
-            document.getElementById('pwa-manifest').setAttribute('href', URL.createObjectURL(blobJson));
-            if ('serviceWorker' in navigator) {
-                const swCode = `self.addEventListener('install', e => self.skipWaiting()); self.addEventListener('fetch', e => e.respondWith(fetch(e.request)));`;
-                const swBlob = new Blob([swCode], {type: 'application/javascript'});
-                navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(()=>{});
-            }
-        }
-
-        let deferredPrompt = null;
-        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
-
-        function checkPwaInstall() {
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-            if (isStandalone) return;
-
-            setTimeout(() => {
-                const isIos = () => { const userAgent = window.navigator.userAgent.toLowerCase(); return /iphone|ipad|ipod/.test( userAgent ); };
-                const modal = document.getElementById('pwa-install-modal');
-                const desc = document.getElementById('pwa-install-desc');
-                const btnInstall = document.getElementById('btn-pwa-install');
-                const btnCancel = document.getElementById('btn-pwa-cancel');
+            const input = document.getElementById('teacher-pin-input').value;
+            if(input === TEACHER_PIN) {
+                const target = pinTargetView; // เก็บค่าเป้าหมายไว้ก่อน
+                closePinModal(); // ปิดกล่องรหัส
                 
-                if(!modal) return;
-                if (isIos()) {
-                    if(desc) desc.innerHTML = `<div class="text-left bg-slate-50 p-4 rounded-xl border border-slate-200 mt-2 text-shadow-none shadow-inner w-full"><p class="font-black text-slate-800 mb-2 text-[15px]"><i class="fa-brands fa-apple text-slate-600"></i> วิธีติดตั้งบน iOS (iPhone/iPad)</p><ol class="list-decimal ml-5 text-slate-600 text-[13px] space-y-2 font-bold leading-relaxed"><li>กดปุ่ม <b>แชร์</b> <i class="fa-solid fa-arrow-up-from-bracket mx-1 text-blue-500"></i> แถบเมนูด้านล่างจอ</li><li>เลื่อนลงมา เลือก <b>เพิ่มไปยังหน้าจอโฮม</b> <i class="fa-solid fa-square-plus mx-1 text-slate-400"></i></li><li>กดคำว่า <b>เพิ่ม (Add)</b> ที่มุมขวาบน</li></ol></div>`;
-                    if(btnInstall) btnInstall.style.display = 'none'; 
-                    if(btnCancel) { btnCancel.innerText = 'รับทราบ / ปิดหน้าต่าง'; btnCancel.className = "w-full flex items-center justify-center btn-press bg-blue-50 text-blue-600 font-black py-3.5 shape-btn border border-blue-200 text-shadow-none"; }
-                    modal.classList.add('active');
-                } else {
-                    if(btnInstall) {
-                        btnInstall.style.display = 'flex';
-                        btnInstall.onclick = async () => {
-                            if (deferredPrompt) {
-                                deferredPrompt.prompt();
-                                const { outcome } = await deferredPrompt.userChoice;
-                                deferredPrompt = null;
-                                modal.classList.remove('active');
-                            } else {
-                                if(desc) desc.innerHTML = `<div class="text-left bg-slate-50 p-4 rounded-xl border border-slate-200 mt-2 text-shadow-none shadow-inner w-full"><p class="font-black text-slate-800 mb-2 text-[15px]"><i class="fa-brands fa-android text-emerald-500"></i> เบราว์เซอร์บล็อกปุ่มอัตโนมัติ</p><ol class="list-decimal ml-5 text-slate-600 text-[13px] space-y-2 font-bold leading-relaxed"><li>กดเมนู <b>3 จุด</b> ที่มุมขวาบนของแอป</li><li>เลือก <b>เพิ่มลงในหน้าจอโฮม</b></li><li>กดยืนยันการติดตั้งเพื่อใช้งาน</li></ol></div>`;
-                                btnInstall.style.display = 'none';
-                                if(btnCancel) { btnCancel.innerText = 'รับทราบ / ปิดหน้าต่าง'; btnCancel.className = "w-full flex items-center justify-center btn-press bg-emerald-50 text-emerald-600 font-black py-3.5 shape-btn border border-emerald-200 text-shadow-none"; }
-                            }
-                        };
-                    }
-                    modal.classList.add('active');
-                }
-            }, 2500);
+                setTimeout(() => { // หน่วงเวลาให้กล่องปิดสนิทก่อนค่อยเปิดหน้าใหม่
+                    if(target === 'view-form') openFormView();
+                    pinTargetView = null; // ค่อยล้างค่าทีหลัง
+                }, 200);
+            } else {
+                showToast("รหัสผ่านไม่ถูกต้อง!", "fa-solid fa-xmark text-red-400");
+                document.getElementById('teacher-pin-input').value = "";
+            }
         }
 
         // ------------------ UI HELPERS ------------------
-        let confirmCallback = null;
         function showConfirm(title, message, callback) {
             document.getElementById('confirm-title').innerText = title;
             document.getElementById('confirm-msg').innerText = message;
@@ -778,463 +499,188 @@
         function switchView(viewId) {
             ['view-splash', 'view-home', 'view-settings', 'view-dashboard', 'view-form', 'view-criteria', 'view-slip'].forEach(id => {
                 const el = document.getElementById(id);
-                if(!el) return;
-                if (id === viewId) el.classList.remove('hidden'); 
-                else el.classList.add('hidden');
+                if(el) el.classList.toggle('hidden', id !== viewId);
             });
         }
 
-        // ------------------ DATA LOGIC (Modified for GitHub Fetch) ------------------
+        // ------------------ LOGIC ------------------
         function fetchStudentData() {
-            if (!CONFIG.GAS_URL || CONFIG.GAS_URL === "วาง_WEB_APP_URL_ของคุณครูที่นี่") {
-                const errM = document.getElementById('system-error-msg'); if(errM) errM.classList.remove('hidden');
-                const errD = document.getElementById('error-details'); if(errD) errD.innerText = "กรุณาใส่ Web App URL ในตัวแปร CONFIG.GAS_URL";
-                return;
-            }
-
-            // Fetch ผ่าน API ไปที่ Google Apps Script
-            fetch(CONFIG.GAS_URL + "?action=getStudents")
-                .then(res => res.json())
-                .then(res => {
-                    if(res.success) {
-                        cachedStudents = res.data;
-                        renderDashboard(cachedStudents);
-                        populateStudentDropdown(cachedStudents);
-                        switchView('view-home');
-                    } else {
-                        throw new Error(res.error || "เกิดข้อผิดพลาดในการดึงข้อมูล");
-                    }
-                })
-                .catch(err => {
-                    const errM = document.getElementById('system-error-msg'); if(errM) errM.classList.remove('hidden');
-                    const errD = document.getElementById('error-details'); if(errD) errD.innerText = "เชื่อมต่อล้มเหลว: " + err.toString();
-                    switchView('view-home');
-                });
+            fetch(CONFIG.GAS_URL + "?action=getStudents").then(res => res.json()).then(res => {
+                if(res.success) { cachedStudents = res.data; renderDashboard(cachedStudents); populateStudentDropdown(cachedStudents); switchView('view-home'); } 
+                else throw new Error(res.error);
+            }).catch(err => {
+                document.getElementById('system-error-msg').classList.remove('hidden');
+                document.getElementById('error-details').innerText = "เชื่อมต่อล้มเหลว: " + err.toString();
+                switchView('view-home');
+            });
         }
 
         function initOffenses() {
-            const select = document.getElementById('offenseSelect');
-            const tableBody = document.querySelector('#criteriaTable tbody');
-            if(!select || !tableBody) return;
-            select.innerHTML = ''; tableBody.innerHTML = '';
-
+            const select = document.getElementById('offenseSelect'); const tb = document.querySelector('#criteriaTable tbody');
+            select.innerHTML = ''; tb.innerHTML = '';
             offenseList.forEach(item => {
-                let opt = document.createElement('option');
-                opt.value = item.value; opt.textContent = item.text;
-                opt.dataset.points = item.points; opt.dataset.editable = item.editable;
-                select.appendChild(opt);
-
+                let opt = document.createElement('option'); opt.value = item.value; opt.textContent = item.text; opt.dataset.points = item.points; select.appendChild(opt);
                 if(item.value !== "") {
-                    let ptsText = item.points === 0 && item.editable ? "ระบุเอง" : (item.points > 0 ? `+${item.points}` : item.points);
-                    if (item.value === "ทำลายทรัพย์สินโรงเรียน") ptsText = "-20 ถึง -70";
-                    tableBody.innerHTML += `<tr><td class="p-3 text-accent">${item.text}</td><td class="p-3 text-center font-black ${item.points > 0 ? 'text-emerald-600' : 'text-red-500'}">${ptsText}</td></tr>`;
+                    let ptsText = item.points === 0 ? "ระบุเอง" : (item.points > 0 ? `+${item.points}` : item.points);
+                    tb.innerHTML += `<tr><td class="p-3 text-accent">${item.text}</td><td class="p-3 text-center font-black ${item.points > 0 ? 'text-emerald-600' : 'text-red-500'}">${ptsText}</td></tr>`;
                 }
             });
         }
 
         function handleOffenseChange() {
-            const select = document.getElementById('offenseSelect');
-            const selectedOpt = select.options[select.selectedIndex];
-            const pointsInput = document.getElementById('pointsInput');
-
-            if(selectedOpt.value === "") {
-                pointsInput.value = ""; pointsInput.disabled = false; return;
-            }
-
-            pointsInput.value = selectedOpt.dataset.points;
-            if(selectedOpt.dataset.editable === "true") {
-                if(selectedOpt.dataset.points == 0) pointsInput.value = ""; 
-                pointsInput.disabled = false; pointsInput.focus();
-            } else {
-                pointsInput.disabled = true;
-            }
+            const select = document.getElementById('offenseSelect'); const opt = select.options[select.selectedIndex];
+            const inp = document.getElementById('pointsInput');
+            inp.disabled = false; inp.readOnly = false; inp.removeAttribute('disabled');
+            inp.value = (opt.value === "" || opt.dataset.points == 0) ? "" : opt.dataset.points;
+            if(opt.value !== "") inp.focus();
         }
 
-        // ระบบเรนเดอร์แดชบอร์ดนักเรียน พร้อมพับ/กาง และประวัติ
         function renderDashboard(students) {
-            const container = document.getElementById('dashboard-container');
-            if(!container) return;
-            container.innerHTML = '';
-
-            if(students.length === 0) {
-                container.innerHTML = '<div class="w-full text-center py-10 glass-panel shape-card text-slate-500 font-bold glow-text">ไม่มีรายชื่อนักเรียนในระบบ</div>';
-                return;
-            }
+            const container = document.getElementById('dashboard-container'); container.innerHTML = '';
+            if(students.length === 0) { container.innerHTML = '<div class="w-full text-center py-10 glass-panel shape-card text-slate-500 font-bold">ไม่มีข้อมูล</div>'; return; }
 
             students.forEach((student, index) => {
-                let borderColor = 'border-l-emerald-500';
-                let statusText = 'ปกติ / ปลอดภัย';
-                let statusClass = 'bg-emerald-100 text-emerald-700';
+                let borderColor = student.score <= 0 ? 'border-l-red-500' : (student.score <= 30 ? 'border-l-amber-500' : 'border-l-emerald-500');
+                let statusClass = student.score <= 0 ? 'bg-red-100 text-red-700' : (student.score <= 30 ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700');
+                let statusText = student.score <= 0 ? 'วิกฤต/พักการเรียน' : (student.score <= 30 ? 'เฝ้าระวัง' : 'ปกติ');
 
-                if (student.score <= 0) {
-                    borderColor = 'border-l-red-500'; statusText = 'วิกฤต/พักการเรียน'; statusClass = 'bg-red-100 text-red-700';
-                } else if (student.score <= 30) {
-                    borderColor = 'border-l-amber-500'; statusText = 'เฝ้าระวัง/แจ้งผู้ปกครอง'; statusClass = 'bg-amber-100 text-amber-700';
-                }
-                
-                let historyHtml = '<div class="text-center text-[11px] text-slate-400 py-4 bg-white/50 rounded-xl mt-2 border border-slate-200 border-dashed"><i class="fa-solid fa-folder-open mb-1 text-lg"></i><br>ไม่มีประวัติการหักคะแนน</div>';
-                if (student.history && student.history.length > 0) {
-                    historyHtml = student.history.slice(0, 3).map(record => {
-                        let dObj = new Date(record.date);
-                        let dateStr = isNaN(dObj) ? record.date : `${dObj.getDate()}/${dObj.getMonth()+1}/${dObj.getFullYear()+543}`;
-                        let ptsColor = record.points > 0 ? "text-emerald-500" : "text-red-500";
-                        let ptsSign = record.points > 0 ? "+" : "";
-                        
-                        return `
-                        <div class="bg-white/80 rounded-xl p-2.5 mb-1.5 border border-slate-100 shadow-sm flex justify-between items-start">
-                            <div class="flex-1 pr-2">
-                                <div class="font-bold text-slate-700 text-[12px] leading-tight">${record.offense}</div>
-                                <div class="text-[9px] text-slate-400 mt-0.5"><i class="fa-regular fa-calendar mr-1"></i> ${dateStr}</div>
-                            </div>
-                            <div class="font-black ${ptsColor} text-[12px] whitespace-nowrap bg-slate-50 px-1.5 py-0.5 rounded shadow-inner">${ptsSign}${record.points}</div>
-                        </div>`;
-                    }).join('');
-                    if(student.history.length > 3) historyHtml += `<div class="text-center text-[10px] font-bold text-slate-400 mt-1">ดูรายละเอียดเพิ่มเติมในสลิป</div>`;
+                let historyHtml = '';
+                if(student.history && student.history.length > 0) {
+                    historyHtml = `<div class="mt-4 border-t border-slate-200/50 pt-3 space-y-2">`;
+                    student.history.slice(0, 3).forEach(h => {
+                        let pts = Number(h.points); let pColor = pts > 0 ? 'text-emerald-500' : 'text-red-500'; let pSign = pts > 0 ? '+' : '';
+                        let dObj = new Date(h.date); let dStr = isNaN(dObj) ? h.date : `${dObj.getDate()}/${dObj.getMonth()+1}/${dObj.getFullYear()+543}`;
+                        historyHtml += `<div class="flex justify-between items-start bg-white/40 p-2 rounded-lg"><div class="flex-1 pr-2"><div class="text-[12px] font-black text-accent">${h.offense}</div><div class="text-[10px] text-slate-500">${dStr}</div></div><div class="font-black text-[12px] ${pColor}">${pSign}${pts}</div></div>`;
+                    });
+                    if(student.history.length > 3) historyHtml += `<div class="text-center text-[10px] text-slate-400 font-bold mt-1">และอีก ${student.history.length - 3} รายการ...</div>`;
+                    historyHtml += `<button onclick="prepareAndShowSlip(${index}); event.stopPropagation();" class="mt-3 w-full bg-primary/10 text-primary font-black py-2 rounded-lg text-[12px] border border-primary/20"><i class="fa-solid fa-receipt mr-1"></i> ดูสลิปคะแนนทั้งหมด</button></div>`;
+                } else {
+                    historyHtml = `<div class="mt-4 border-t border-slate-200/50 pt-4 text-center text-slate-400 text-[11px] font-bold"><i class="fa-solid fa-shield-check text-lg mb-1 block"></i>ไม่มีประวัติถูกหักคะแนน</div>`;
                 }
 
                 container.innerHTML += `
-                    <div class="student-card-item glass-panel shape-card p-4 shadow-sm border-l-4 ${borderColor} fade-in text-shadow-none cursor-pointer" data-name="${student.name.toLowerCase()}" onclick="toggleStudentDetails(${index})">
-                        <div class="flex justify-between items-center mb-2 border-b border-white/30 pb-2">
-                            <h3 class="text-[16px] font-black text-accent tracking-tight glow-text flex-1">${student.name}</h3>
-                            <div class="w-11 h-11 rounded-full flex items-center justify-center font-black text-[18px] ${statusClass} shadow-inner shrink-0">
-                                ${student.score}
-                            </div>
+                    <div class="student-card-item glass-panel shape-card p-4 shadow-sm border-l-4 ${borderColor} fade-in cursor-pointer overflow-hidden transition-all duration-300" data-name="${student.name.toLowerCase()}" onclick="this.classList.toggle('expanded')">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-[16px] font-black text-accent">${student.name}</h3>
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center font-black text-[16px] ${statusClass} shadow-inner">${student.score}</div>
                         </div>
-                        <div class="flex justify-between items-center text-[11px] font-bold">
-                            <span class="text-slate-500 flex items-center gap-1"><i class="fa-solid fa-chevron-down chevron-icon transition-transform"></i> รายละเอียด</span>
-                            <span class="px-2 py-0.5 rounded ${statusClass} uppercase tracking-wider">${statusText}</span>
+                        <div class="flex justify-between items-center text-[11px] font-bold mt-2">
+                            <span class="px-2 py-0.5 rounded ${statusClass}">${statusText}</span>
+                            <span class="text-slate-400"><i class="fa-solid fa-chevron-down"></i> แตะเพื่อดูประวัติ</span>
                         </div>
-                        
-                        <div class="student-details-panel hidden mt-3 pt-3 border-t border-slate-200/50" id="student-details-${index}" onclick="event.stopPropagation()">
-                            <h4 class="text-[11px] font-black text-slate-600 uppercase tracking-widest mb-2"><i class="fa-solid fa-clock-rotate-left"></i> ประวัติล่าสุด</h4>
-                            <div class="mb-3">${historyHtml}</div>
-                            <button onclick="prepareAndShowSlip(${index})" class="btn-press w-full bg-primary text-white font-black py-2.5 rounded-xl border border-primary/20 shadow-md flex items-center justify-center gap-2 text-[13px] text-shadow-none">
-                                <i class="fa-solid fa-receipt"></i> ดูและบันทึกสลิป
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        // กดพับกางรายละเอียดนักเรียน
-        function toggleStudentDetails(index) {
-            document.querySelectorAll('.student-card-item').forEach((card, i) => {
-                const panel = document.getElementById(`student-details-${i}`);
-                const icon = card.querySelector('.chevron-icon');
-                if (i === index) {
-                    if(panel.classList.contains('hidden')) {
-                        panel.classList.remove('hidden');
-                        if(icon) icon.style.transform = 'rotate(180deg)';
-                        card.classList.add('bg-white/40');
-                    } else {
-                        panel.classList.add('hidden');
-                        if(icon) icon.style.transform = 'rotate(0deg)';
-                        card.classList.remove('bg-white/40');
-                    }
-                } else {
-                    panel.classList.add('hidden');
-                    if(icon) icon.style.transform = 'rotate(0deg)';
-                    card.classList.remove('bg-white/40');
-                }
-            });
-        }
-
-        // ระบบเตรียมข้อมูลลงสลิป
-        function prepareAndShowSlip(index) {
-            const student = cachedStudents[index];
-            if (!student) return;
-            
-            document.getElementById('export-slip-name').innerText = student.name;
-            
-            const scoreEl = document.getElementById('export-slip-score');
-            const statusEl = document.getElementById('export-slip-status');
-            const topBorder = document.getElementById('slip-top-border');
-            const titleEl = document.getElementById('slip-title');
-            
-            scoreEl.innerText = student.score;
-            
-            if (student.score <= 0) {
-                scoreEl.className = 'font-black text-[18px] text-red-600';
-                statusEl.innerText = 'วิกฤต/พักการเรียน';
-                statusEl.className = 'font-black text-[12px] px-2.5 py-0.5 rounded shadow-sm border bg-red-100 border-red-200 text-red-700';
-                topBorder.className = 'absolute top-0 left-0 w-full h-2 bg-red-500';
-                titleEl.className = 'text-[22px] font-black text-red-600 leading-tight text-center w-full mt-1';
-            } else if (student.score <= 30) {
-                scoreEl.className = 'font-black text-[18px] text-amber-600';
-                statusEl.innerText = 'เฝ้าระวัง/แจ้งผู้ปกครอง';
-                statusEl.className = 'font-black text-[12px] px-2.5 py-0.5 rounded shadow-sm border bg-amber-100 border-amber-200 text-amber-700';
-                topBorder.className = 'absolute top-0 left-0 w-full h-2 bg-amber-500';
-                titleEl.className = 'text-[22px] font-black text-amber-600 leading-tight text-center w-full mt-1';
-            } else {
-                scoreEl.className = 'font-black text-[18px] text-emerald-600';
-                statusEl.innerText = 'ปกติ / ปลอดภัย';
-                statusEl.className = 'font-black text-[12px] px-2.5 py-0.5 rounded shadow-sm border bg-emerald-100 border-emerald-200 text-emerald-700';
-                topBorder.className = 'absolute top-0 left-0 w-full h-2 bg-emerald-500';
-                titleEl.className = 'text-[22px] font-black text-emerald-600 leading-tight text-center w-full mt-1';
-            }
-            
-            const now = new Date();
-            document.getElementById('export-slip-date').innerText = `ข้อมูล ณ วันที่ ${now.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' })} เวลา ${now.toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'})}`;
-            
-            // นำประวัติใส่สลิป (จัดกลุ่มรายการซ้ำ)
-            const historyContainer = document.getElementById('export-slip-history');
-            if (student.history && student.history.length > 0) {
-                // 1. จัดกลุ่มข้อมูล (Aggregate)
-                let grouped = {};
-                student.history.forEach(record => {
-                    let key = record.offense;
-                    // ถ้าเป็น "อื่นๆ" ให้รวม note ด้วยเพื่อแยกความผิดที่ไม่เหมือนกัน
-                    if(key === "อื่นๆ") key = record.offense + "_" + record.notes;
-                    
-                    if (!grouped[key]) {
-                        grouped[key] = {
-                            offense: record.offense,
-                            count: 0,
-                            totalPoints: 0,
-                            latestDate: record.date,
-                            notes: record.notes
-                        };
-                    }
-                    grouped[key].count++;
-                    grouped[key].totalPoints += Number(record.points);
-                });
-
-                let aggregatedArray = Object.values(grouped);
-
-                let historyHtml = aggregatedArray.map(record => {
-                    let dObj = new Date(record.latestDate);
-                    let dateStr = isNaN(dObj) ? record.latestDate : `${dObj.getDate()} ${['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'][dObj.getMonth()]} ${dObj.getFullYear()+543}`;
-                    
-                    let ptsColor = record.totalPoints > 0 ? "text-emerald-600" : "text-red-600";
-                    let ptsSign = record.totalPoints > 0 ? "+" : "";
-                    
-                    let dateLabel = record.count > 1 ? "ล่าสุด: " + dateStr : dateStr;
-                    let countLabel = record.count > 1 ? `<span class="text-amber-600 font-black ml-1 bg-amber-100 px-1.5 py-0.5 rounded text-[10px]">x${record.count}</span>` : "";
-
-                    return `
-                    <div class="bg-white border border-slate-100 rounded-xl p-3 shadow-sm relative overflow-hidden">
-                        <div class="absolute left-0 top-0 bottom-0 w-1.5 ${record.totalPoints > 0 ? 'bg-emerald-400' : 'bg-red-400'}"></div>
-                        <div class="flex justify-between items-start pl-3">
-                            <div class="flex-1 pr-2">
-                                <div class="font-black text-accent text-[13px] leading-tight flex items-center flex-wrap gap-1">${record.offense} ${countLabel}</div>
-                                <div class="text-[10px] text-slate-500 mt-1.5"><i class="fa-regular fa-calendar mr-1"></i> ${dateLabel}</div>
-                                ${record.notes && record.notes !== "-" ? `<div class="text-[10px] text-slate-400 italic mt-0.5 truncate">"${record.notes}"</div>` : ''}
-                            </div>
-                            <div class="font-black ${ptsColor} text-[14px] bg-slate-50 px-2 py-1 rounded border border-slate-100 shadow-inner">${ptsSign}${record.totalPoints}</div>
-                        </div>
+                        <div class="history-content">${historyHtml}</div>
                     </div>`;
-                }).join('');
-                
-                historyContainer.innerHTML = historyHtml;
-            } else {
-                historyContainer.innerHTML = `<div class="text-center py-6 border-2 border-dashed border-emerald-200 bg-emerald-50 rounded-[16px]"><div class="w-10 h-10 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-2 text-xl shadow-sm"><i class="fa-solid fa-check"></i></div><p class="font-black text-emerald-600 text-[13px]">ไม่พบประวัติการหักคะแนน</p></div>`;
-            }
-            
-            document.querySelectorAll('.app-slip-logo-container').forEach(container => {
-                if(earlyPrefs.customLogo) {
-                    container.innerHTML = `<img src="${earlyPrefs.customLogo}" class="w-16 h-16 object-contain rounded-full mx-auto shadow-sm border border-slate-100" alt="logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3596/3596091.png'">`;
-                } else {
-                    container.innerHTML = `<div class="w-16 h-16 rounded-full border-2 border-primary/20 bg-primary/10 flex items-center justify-center mx-auto"><span class="text-sm font-black text-primary">${earlyPrefs.schoolLogo}</span></div>`;
-                }
             });
-            
-            switchView('view-slip');
-        }
-
-        // ระบบจับภาพหน้าจอสร้างสลิป
-        function processImageExport(id, type) {
-            window.scrollTo(0,0); 
-            showToast('กำลังประมวลผลรูปภาพ...', 'fa-solid fa-camera text-primary');
-            
-            setTimeout(() => {
-                const target = document.getElementById(id);
-                if(target) {
-                    html2canvas(target, { scale: 3, backgroundColor: '#ffffff', useCORS: true }).then(canvas => {
-                        const imgUrl = canvas.toDataURL('image/png');
-                        const studentName = document.getElementById('export-slip-name').innerText;
-                        const fileName = `${type}_${studentName}.png`;
-                        
-                        const link = document.createElement('a'); 
-                        link.download = fileName; 
-                        link.href = imgUrl; 
-                        link.click();
-                        showToast('บันทึกลงเครื่องเรียบร้อย', 'fa-solid fa-check text-emerald-500');
-                    }).catch(err => { 
-                        showToast('เกิดข้อผิดพลาดในการเซฟรูป', 'fa-solid fa-triangle-exclamation text-red-500'); 
-                    });
-                }
-            }, 600);
         }
 
         function populateStudentDropdown(students) {
-            const select = document.getElementById('studentSelect');
-            if(!select) return;
-            select.innerHTML = '<option value="">-- เลือกชื่อนักเรียน --</option>';
-            students.forEach(student => {
-                let opt = document.createElement('option');
-                opt.value = student.name; opt.textContent = `${student.name} (คงเหลือ: ${student.score})`;
-                select.appendChild(opt);
-            });
+            const select = document.getElementById('studentSelect'); select.innerHTML = '<option value="">-- เลือกชื่อนักเรียน --</option>';
+            students.forEach(s => select.innerHTML += `<option value="${s.name}">${s.name} (เหลือ: ${s.score})</option>`);
         }
-
         function filterDashboard() {
-            const query = document.getElementById('searchStudent').value.toLowerCase();
-            const items = document.querySelectorAll('.student-card-item');
-            items.forEach(item => {
-                if(item.dataset.name.includes(query)) item.style.display = 'block';
-                else item.style.display = 'none';
-            });
+            const q = document.getElementById('searchStudent').value.toLowerCase();
+            document.querySelectorAll('.student-card-item').forEach(item => item.style.display = item.dataset.name.includes(q) ? 'block' : 'none');
         }
 
-        function openFormView() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('recordDate').value = today;
-            switchView('view-form');
-        }
+        function openFormView() { document.getElementById('recordDate').value = new Date().toISOString().split('T')[0]; switchView('view-form'); }
 
         function submitForm(event) {
             event.preventDefault();
+            const studentName = document.getElementById('studentSelect').value; const offense = document.getElementById('offenseSelect').value;
+            const points = document.getElementById('pointsInput').value; const notes = document.getElementById('notesInput').value; const date = document.getElementById('recordDate').value;
+
+            if(!studentName || !offense || points === "") return showToast("กรุณากรอกข้อมูลให้ครบ", "fa-solid fa-triangle-exclamation text-amber-400");
             
-            const studentName = document.getElementById('studentSelect').value;
-            const offense = document.getElementById('offenseSelect').value;
-            const points = document.getElementById('pointsInput').value;
-            const notes = document.getElementById('notesInput').value;
-            const date = document.getElementById('recordDate').value;
-
-            if(!studentName || !offense || points === "") {
-                showToast("กรุณากรอกข้อมูลให้ครบ", "fa-solid fa-triangle-exclamation text-amber-400");
-                return;
-            }
-
-            showConfirm('ยืนยันการบันทึก', `คุณกำลังจะบันทึกคะแนนของ ${studentName}`, () => {
-                const btn = document.getElementById('btn-submit-form');
-                const originalHtml = btn.innerHTML;
-                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...`;
-                btn.disabled = true;
-
-                const record = { studentName, offense, points, notes, date };
-
-                if (!CONFIG.GAS_URL || CONFIG.GAS_URL === "วาง_WEB_APP_URL_ของคุณครูที่นี่") {
-                    showToast("ไม่พบลิงก์ Web App URL", "fa-solid fa-triangle-exclamation text-red-400");
-                    btn.innerHTML = originalHtml; btn.disabled = false;
-                    return;
-                }
-
-                // Fetch POST ไปยัง Apps Script
-                fetch(CONFIG.GAS_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ action: 'saveRecord', record: record })
-                })
-                .then(res => res.json())
-                .then(res => {
-                    btn.innerHTML = originalHtml; btn.disabled = false;
-                    if(res.success) {
-                        showToast('บันทึกข้อมูลและอัปเดตคะแนนเรียบร้อย', 'fa-solid fa-check text-emerald-400');
-                        document.getElementById('behaviorForm').reset();
-                        document.getElementById('recordDate').value = new Date().toISOString().split('T')[0];
-                        document.getElementById('pointsInput').disabled = false;
-                        
-                        const actionContainer = document.getElementById('action-buttons-container');
-                        if(actionContainer) actionContainer.classList.add('hidden');
-                        switchView('view-splash');
-                        fetchStudentData(); // โหลดข้อมูลใหม่
-                    } else {
-                        showToast(res.error || "บันทึกล้มเหลว", "fa-solid fa-triangle-exclamation text-red-400");
-                    }
-                })
-                .catch(err => {
-                    btn.innerHTML = originalHtml; btn.disabled = false;
-                    showToast("เซิร์ฟเวอร์ขัดข้อง", "fa-solid fa-triangle-exclamation text-red-400");
-                });
+            showConfirm('ยืนยันการบันทึก', `บันทึกคะแนนของ ${studentName}`, () => {
+                const btn = document.getElementById('btn-submit-form'); const orig = btn.innerHTML;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังอัปเดต...`; btn.disabled = true;
+                
+                fetch(CONFIG.GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'saveRecord', record: { studentName, offense, points, notes, date } }) })
+                .then(res => res.json()).then(res => {
+                    btn.innerHTML = orig; btn.disabled = false;
+                    if(res.success) { showToast('อัปเดตเรียบร้อย', 'fa-solid fa-check text-emerald-400'); document.getElementById('behaviorForm').reset(); fetchStudentData(); } 
+                    else showToast(res.error, "fa-solid fa-xmark text-red-400");
+                }).catch(() => { btn.innerHTML = orig; btn.disabled = false; showToast("ขัดข้อง ลองใหม่", "fa-solid fa-wifi text-red-400"); });
             });
+        }
+
+        // ------------------ SLIP EXPORT ------------------
+        function prepareAndShowSlip(studentIndex) {
+            const student = cachedStudents[studentIndex];
+            if(!student) return;
+
+            document.getElementById('export-slip-name').innerText = student.name;
+            document.getElementById('export-slip-score').innerText = student.score;
+            
+            let statEl = document.getElementById('export-slip-status');
+            statEl.innerText = student.score <= 0 ? 'วิกฤต' : (student.score <= 30 ? 'เฝ้าระวัง' : 'ปกติ');
+            statEl.className = `font-black text-[12px] px-2.5 py-0.5 rounded shadow-sm border ${student.score <= 0 ? 'bg-red-100 text-red-700 border-red-200' : (student.score <= 30 ? 'bg-amber-100 text-amber-700 border-amber-200' : 'bg-emerald-100 text-emerald-700 border-emerald-200')}`;
+            
+            const now = new Date();
+            document.getElementById('export-slip-date').innerText = `อัปเดตล่าสุด: ${now.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' })} ${now.toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'})}`;
+            
+            const hc = document.getElementById('export-slip-history');
+            if (student.history && student.history.length > 0) {
+                let grouped = {};
+                student.history.forEach(r => {
+                    let key = r.offense === "อื่นๆ" ? r.offense + "_" + r.notes : r.offense;
+                    if (!grouped[key]) grouped[key] = { offense: r.offense, count: 0, totalPoints: 0, latestDate: r.date, notes: r.notes };
+                    grouped[key].count++; grouped[key].totalPoints += Number(r.points);
+                });
+
+                hc.innerHTML = Object.values(grouped).map(r => {
+                    let dObj = new Date(r.latestDate); let dStr = isNaN(dObj) ? r.latestDate : `${dObj.getDate()} ${['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'][dObj.getMonth()]} ${dObj.getFullYear()+543}`;
+                    return `
+                    <div class="bg-white border border-slate-100 rounded-xl p-3 shadow-sm relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-1.5 ${r.totalPoints > 0 ? 'bg-emerald-400' : 'bg-red-400'}"></div>
+                        <div class="flex justify-between items-start pl-3">
+                            <div class="flex-1 pr-2">
+                                <div class="font-black text-accent text-[13px] leading-tight flex items-center flex-wrap gap-1">${r.offense} ${r.count > 1 ? `<span class="text-amber-600 font-black ml-1 bg-amber-100 px-1.5 py-0.5 rounded text-[10px]">x${r.count}</span>` : ""}</div>
+                                <div class="text-[10px] text-slate-500 mt-1.5"><i class="fa-regular fa-calendar mr-1"></i> ${r.count > 1 ? "ล่าสุด: " : ""}${dStr}</div>
+                                ${r.notes && r.notes !== "-" ? `<div class="text-[10px] text-slate-400 italic mt-0.5 truncate">"${r.notes}"</div>` : ''}
+                            </div>
+                            <div class="font-black ${r.totalPoints > 0 ? "text-emerald-600" : "text-red-600"} text-[14px] bg-slate-50 px-2 py-1 rounded border border-slate-100 shadow-inner">${r.totalPoints > 0 ? '+' : ''}${r.totalPoints}</div>
+                        </div>
+                    </div>`;
+                }).join('');
+            } else {
+                hc.innerHTML = `<div class="text-center py-6 border-2 border-dashed border-emerald-200 bg-emerald-50 rounded-[16px]"><div class="w-10 h-10 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-2 text-xl shadow-sm"><i class="fa-solid fa-check"></i></div><p class="font-black text-emerald-600 text-[13px]">ไม่พบประวัติหักคะแนน</p></div>`;
+            }
+            switchView('view-slip');
+        }
+
+        function processImageExport() {
+            window.scrollTo(0,0); showToast('กำลังประมวลผลรูปภาพ...', 'fa-solid fa-camera text-primary');
+            setTimeout(() => {
+                html2canvas(document.getElementById('export-canvas'), { scale: 3, backgroundColor: '#ffffff', useCORS: true }).then(canvas => {
+                    const link = document.createElement('a'); link.download = `สลิปคะแนน_${document.getElementById('export-slip-name').innerText}.png`; link.href = canvas.toDataURL('image/png'); link.click();
+                    showToast('บันทึกลงเครื่องเรียบร้อย', 'fa-solid fa-check text-emerald-500');
+                });
+            }, 600);
         }
 
         // ------------------ SETTINGS ------------------
         function openSettingsView() { 
-            if(document.getElementById('set-bg-theme')) document.getElementById('set-bg-theme').value = earlyPrefs.theme;
-            if(document.getElementById('set-school-name')) document.getElementById('set-school-name').value = earlyPrefs.schoolName;
-            
-            let blurBgVal = earlyPrefs.customBgBlur !== undefined ? earlyPrefs.customBgBlur : 50;
-            if(document.getElementById('set-bg-blur')) { document.getElementById('set-bg-blur').value = blurBgVal; document.getElementById('display-bg-blur').innerText = blurBgVal + '%'; }
-            
-            let opVal = earlyPrefs.cardOpacity !== undefined ? earlyPrefs.cardOpacity : 15;
-            if(document.getElementById('set-card-opacity')) { document.getElementById('set-card-opacity').value = opVal; document.getElementById('display-card-opacity').innerText = opVal + '%'; }
-            
-            let blurCardVal = earlyPrefs.cardBlur !== undefined ? earlyPrefs.cardBlur : 25;
-            if(document.getElementById('set-card-blur')) { document.getElementById('set-card-blur').value = blurCardVal; document.getElementById('display-card-blur').innerText = blurCardVal + 'px'; }
-            
+            document.getElementById('set-bg-theme').value = earlyPrefs.theme; document.getElementById('set-school-name').value = earlyPrefs.schoolName;
             switchView('view-settings'); 
         }
-
-        function cancelSettingsAndGoBack() {
-            if(document.getElementById('set-bg-blur')) document.getElementById('set-bg-blur').value = earlyPrefs.customBgBlur !== undefined ? earlyPrefs.customBgBlur : 50;
-            if(document.getElementById('set-card-opacity')) document.getElementById('set-card-opacity').value = earlyPrefs.cardOpacity !== undefined ? earlyPrefs.cardOpacity : 15;
-            if(document.getElementById('set-card-blur')) document.getElementById('set-card-blur').value = earlyPrefs.cardBlur !== undefined ? earlyPrefs.cardBlur : 25;
-            applyPrefs(); switchView('view-home');
-        }
-
-        function previewBgBlur(val) {
-            document.getElementById('display-bg-blur').innerText = val + '%';
-            const overlay = document.getElementById('custom-bg-overlay');
-            if(overlay) {
-                overlay.style.backdropFilter = `blur(${val / 5}px)`;
-                overlay.style.webkitBackdropFilter = `blur(${val / 5}px)`;
-                overlay.style.background = `rgba(255,255,255,${(val / 100) * 0.4})`;
-            }
-        }
-        function previewCardOpacity(val) { document.documentElement.style.setProperty('--glass-opacity', val / 100); document.getElementById('display-card-opacity').innerText = val + '%'; }
-        function previewCardBlur(val) { document.documentElement.style.setProperty('--glass-blur', val + 'px'); document.getElementById('display-card-blur').innerText = val + 'px'; }
-
-        function handleImageUpload(event) {
-            const file = event.target.files[0]; if (!file) return;
-            if (!file.type.startsWith('image/')) { showToast('เฉพาะไฟล์รูปภาพเท่านั้น', 'fa-solid fa-triangle-exclamation text-red-400'); return; }
-            const reader = new FileReader(); reader.readAsDataURL(file);
-            reader.onload = (e) => {
-                const img = new Image(); img.src = e.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
-                    const MAX = 1280; let width = img.width, height = img.height;
-                    if (width > height) { if (width > MAX) { height *= MAX / width; width = MAX; } } else { if (height > MAX) { width *= MAX / height; height = MAX; } }
-                    canvas.width = width; canvas.height = height; ctx.drawImage(img, 0, 0, width, height);
-                    earlyPrefs.customBg = canvas.toDataURL('image/jpeg', 0.7); applyPrefs(); showToast('เปลี่ยนรูปพื้นหลังสำเร็จ', 'fa-solid fa-image text-emerald-400');
-                };
-            };
-        }
-        function clearCustomBackground() { earlyPrefs.customBg = null; const u = document.getElementById('set-bg-upload'); if(u) u.value = ''; applyPrefs(); showToast('นำรูปออกสำเร็จ', 'fa-solid fa-trash text-emerald-400'); }
-
+        function cancelSettingsAndGoBack() { applyPrefs(); switchView('view-home'); }
         function handleLogoUpload(event) {
-            const file = event.target.files[0]; if (!file) return;
-            if (!file.type.startsWith('image/')) { showToast('เฉพาะไฟล์รูปภาพเท่านั้น', 'fa-solid fa-triangle-exclamation text-red-400'); return; }
+            const file = event.target.files[0]; if (!file || !file.type.startsWith('image/')) return;
             const reader = new FileReader(); reader.readAsDataURL(file);
             reader.onload = (e) => {
                 const img = new Image(); img.src = e.target.result;
                 img.onload = () => {
-                    const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
-                    const MAX = 400; let width = img.width, height = img.height;
-                    if (width > height) { if (width > MAX) { height *= MAX / width; width = MAX; } } else { if (height > MAX) { width *= MAX / height; height = MAX; } }
-                    canvas.width = width; canvas.height = height; ctx.drawImage(img, 0, 0, width, height);
-                    earlyPrefs.customLogo = canvas.toDataURL('image/png'); applyPrefs(); showToast('อัปเดตโลโก้สำเร็จ', 'fa-solid fa-check text-emerald-400');
+                    const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); canvas.width = 400; canvas.height = 400;
+                    ctx.drawImage(img, 0, 0, 400, 400); earlyPrefs.customLogo = canvas.toDataURL('image/png'); applyPrefs(); showToast('เปลี่ยนโลโก้สำเร็จ', 'fa-solid fa-check');
                 };
             };
         }
-        function clearCustomLogo() { earlyPrefs.customLogo = "https://cdn-icons-png.flaticon.com/512/2940/2940653.png"; const u = document.getElementById('set-logo-upload'); if(u) u.value = ''; applyPrefs(); showToast('ใช้รูประบบเริ่มต้น', 'fa-solid fa-rotate-left text-emerald-400'); }
-
+        function clearCustomLogo() { earlyPrefs.customLogo = "https://cdn-icons-png.flaticon.com/512/2940/2940653.png"; applyPrefs(); showToast('ใช้โลโก้ระบบ', 'fa-solid fa-rotate-left'); }
         function saveSettings() {
-            if(document.getElementById('set-school-name')) earlyPrefs.schoolName = document.getElementById('set-school-name').value.trim() || DEFAULT_PREFS.schoolName; 
-            if(document.getElementById('set-bg-theme')) earlyPrefs.theme = document.getElementById('set-bg-theme').value;
-            if(document.getElementById('set-bg-blur')) earlyPrefs.customBgBlur = parseInt(document.getElementById('set-bg-blur').value);
-            if(document.getElementById('set-card-opacity')) earlyPrefs.cardOpacity = parseInt(document.getElementById('set-card-opacity').value);
-            if(document.getElementById('set-card-blur')) earlyPrefs.cardBlur = parseInt(document.getElementById('set-card-blur').value);
-            
-            try { 
-                localStorage.setItem('behaviorApp_prefs', JSON.stringify(earlyPrefs)); 
-                applyPrefs(); 
-                showToast('บันทึกสำเร็จ', 'fa-solid fa-check text-emerald-400'); 
-                switchView('view-home'); 
-            } 
-            catch (e) { showToast('หน่วยความจำเต็ม', 'fa-solid fa-triangle-exclamation text-red-400'); clearCustomBackground(); }
+            earlyPrefs.schoolName = document.getElementById('set-school-name').value.trim() || DEFAULT_PREFS.schoolName; 
+            earlyPrefs.theme = document.getElementById('set-bg-theme').value;
+            localStorage.setItem('behaviorApp_prefs', JSON.stringify(earlyPrefs)); applyPrefs(); showToast('บันทึกการตั้งค่าสำเร็จ', 'fa-solid fa-check'); switchView('view-home'); 
         }
     </script>
 </body>
