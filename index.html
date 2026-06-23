@@ -41,17 +41,14 @@
     
     <style>
         :root {
-            /* Default Theme Variables (Blue) */
             --primary: #3b82f6;
             --primary-light: #60a5fa;
             --orb-1: #3b82f6;
             --orb-2: #0284c7;
-            
             --glass-opacity: 0.1;
             --glass-blur: 24px;
         }
 
-        /* Simplified Theme System */
         .theme-amber { --primary: #f59e0b; --primary-light: #fbbf24; --orb-1: #fcd34d; --orb-2: #d97706; }
         .theme-blue { --primary: #3b82f6; --primary-light: #60a5fa; --orb-1: #3b82f6; --orb-2: #0284c7; }
         .theme-emerald { --primary: #10b981; --primary-light: #34d399; --orb-1: #10b981; --orb-2: #047857; }
@@ -71,7 +68,6 @@
             font-family: 'Sarabun', sans-serif;
         }
 
-        /* Premium Animated Background */
         .bg-container { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background-color: #0f172a; transition: background-image 0.5s ease; background-size: cover; background-position: center; }
         .bg-sphere { position: absolute; filter: blur(120px); opacity: 0.5; border-radius: 50%; animation: float 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1); mix-blend-mode: screen; }
         
@@ -79,12 +75,8 @@
         .sphere-2 { bottom: -20%; left: -20%; width: 90vw; height: 90vw; background: radial-gradient(circle, var(--orb-2), transparent 70%); animation-delay: -10s; }
         .custom-bg-overlay { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); transition: 0.3s; }
 
-        @keyframes float { 
-            0% { transform: translate(0, 0) scale(1); } 
-            100% { transform: translate(15%, 10%) scale(1.15); } 
-        }
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(15%, 10%) scale(1.15); } }
 
-        /* Ultra-Premium Glassmorphism */
         .glass-panel { 
             background: rgba(255, 255, 255, var(--glass-opacity)); 
             backdrop-filter: blur(var(--glass-blur)) saturate(150%); 
@@ -96,15 +88,9 @@
             transition: all 0.3s ease; 
         }
         
-        /* Modern Gradients & Typography */
-        .text-gradient { 
-            background: linear-gradient(to right, #ffffff, #94a3b8); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-        }
+        .text-gradient { background: linear-gradient(to right, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .text-primary-gradient { color: var(--primary-light); }
 
-        /* Premium Buttons */
         .btn-press { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
         .btn-press:active { transform: scale(0.96); filter: brightness(0.9); }
         
@@ -115,7 +101,6 @@
             border: none;
         }
 
-        /* Clean Inputs */
         .input-field { 
             width: 100%; padding: 16px 20px; 
             border: 1px solid rgba(255, 255, 255, 0.1); 
@@ -128,11 +113,10 @@
         .input-field option { background: #1e293b; color: #ffffff; }
         .input-field:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* Scrollbar */
         .scroll-fine::-webkit-scrollbar { width: 4px; }
         .scroll-fine::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
 
-        /* Modals & Toasts */
+        /* Modals & Details */
         #toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(200%); background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 16px 28px; border-radius: 100px; z-index: 10000; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); display: flex; align-items: center; gap: 12px; white-space: nowrap; opacity: 0; visibility: hidden; }
         #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; visibility: visible; }
 
@@ -147,8 +131,24 @@
         .logo-pulse { animation: logo-bounce 3s infinite ease-in-out; }
         @keyframes logo-bounce { 0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 20px 40px rgba(0,0,0,0.2); } 50% { transform: translateY(-10px) scale(1.02); box-shadow: 0 30px 50px rgba(0,0,0,0.3), 0 0 40px var(--primary-light); } }
         
-        /* Utility */
         section { transition: opacity 0.3s ease; }
+
+        /* Expandable Student History */
+        .student-details-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+        .student-card-item.expanded .student-details-panel {
+            max-height: 500px;
+            opacity: 1;
+            padding-top: 1rem;
+            margin-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .chevron-icon { transition: transform 0.3s ease; }
+        .student-card-item.expanded .chevron-icon { transform: rotate(180deg); }
     </style>
 </head>
 <body class="flex flex-col items-center min-h-screen pt-[max(env(safe-area-inset-top),1rem)]" id="app-body">
@@ -193,9 +193,25 @@
         </div>
     </div>
 
+    <!-- Teacher PIN Modal -->
+    <div id="pin-modal" class="modal-bg">
+        <div class="modal-box flex flex-col items-center justify-center text-center">
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-5 bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-inner">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-2">เฉพาะครูผู้สอน</h3>
+            <p class="text-[14px] text-slate-300 font-medium mb-6 w-full">กรุณาใส่รหัสผ่านเพื่อดำเนินการต่อ</p>
+            <input type="password" id="pin-input" class="input-field text-center text-2xl tracking-[0.5em] mb-6 font-inter" placeholder="****" maxlength="6">
+            <div class="flex gap-3 w-full">
+                <button onclick="closePinModal()" class="flex-1 btn-press bg-white/10 text-white font-bold py-3.5 rounded-xl border border-white/10">ยกเลิก</button>
+                <button onclick="verifyPin()" class="flex-1 btn-press btn-primary font-bold py-3.5 rounded-xl shadow-lg">ยืนยัน</button>
+            </div>
+            <p class="text-xs text-slate-500 mt-4">*นักเรียนสามารถดูคะแนนในเมนูภาพรวมได้โดยไม่ต้องใส่รหัส</p>
+        </div>
+    </div>
+
     <main class="container mx-auto max-w-md px-6 pt-10 pb-12 flex-1 w-full flex flex-col h-full overflow-hidden relative z-10">
         
-        <!-- ================= VIEW 0: SPLASH SCREEN ================= -->
         <section id="view-splash" class="flex flex-col items-center justify-center flex-1 min-h-[75vh] w-full select-none">
             <div class="w-32 h-32 bg-white/10 backdrop-blur-md rounded-[2rem] border border-white/20 flex items-center justify-center mb-8 logo-pulse p-4">
                 <img src="https://cdn-icons-png.flaticon.com/512/2940/2940653.png" class="w-24 h-24 object-contain relative z-10 drop-shadow-xl" alt="logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3596/3596091.png'">
@@ -205,11 +221,10 @@
             
             <div class="mt-12 flex items-center justify-center gap-3 bg-black/30 backdrop-blur-xl px-5 py-3 rounded-full border border-white/10 shadow-lg">
                 <i class="fa-solid fa-circle-notch fa-spin text-primary-light text-base"></i>
-                <span class="text-sm font-semibold text-slate-200">กำลังเชื่อมต่อฐานข้อมูล...</span>
+                <span class="text-sm font-semibold text-slate-200">กำลังซิงค์ข้อมูลจากฐาน...</span>
             </div>
         </section>
 
-        <!-- ================= VIEW 1: HOME/MAIN MENU ================= -->
         <section id="view-home" class="hidden flex flex-col items-center justify-center flex-1">
             <header class="text-center mb-10 w-full flex flex-col items-center mt-4">
                 <div class="w-24 h-24 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 flex items-center justify-center mb-6 relative overflow-hidden group app-logo-container p-3 shadow-xl"></div>
@@ -220,28 +235,35 @@
             <div class="glass-panel rounded-[2rem] w-full p-8 text-center relative flex flex-col items-center">
                 <div id="action-buttons-container" class="flex flex-col gap-4 w-full">
                     
-                    <button onclick="switchView('view-dashboard')" class="btn-press w-full bg-white/5 border border-white/10 text-white font-bold text-lg py-5 rounded-[1.25rem] flex items-center justify-center gap-3 hover:bg-white/10 transition">
-                        <div class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center"><i class="fa-solid fa-chart-columns"></i></div>
-                        ภาพรวมคะแนน
+                    <!-- นักเรียนเข้าได้ -->
+                    <button onclick="switchView('view-dashboard')" class="btn-press w-full bg-white/5 border border-white/10 text-white font-bold text-lg py-5 rounded-[1.25rem] flex items-center justify-center gap-3 hover:bg-white/10 transition shadow-lg">
+                        <div class="w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center"><i class="fa-solid fa-user-check"></i></div>
+                        เช็คคะแนนความประพฤติ
                     </button>
                     
-                    <button onclick="openFormView()" class="btn-press w-full btn-primary font-bold text-lg py-5 rounded-[1.25rem] flex items-center justify-center gap-3">
+                    <div class="w-full flex items-center gap-4 my-2">
+                        <div class="h-px bg-white/10 flex-1"></div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">เฉพาะคุณครู</span>
+                        <div class="h-px bg-white/10 flex-1"></div>
+                    </div>
+
+                    <!-- เฉพาะครู -->
+                    <button onclick="requestTeacherAccess('form')" class="btn-press w-full btn-primary font-bold text-lg py-5 rounded-[1.25rem] flex items-center justify-center gap-3">
                         <div class="w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center"><i class="fa-solid fa-plus"></i></div>
-                        บันทึกคะแนนใหม่
+                        บันทึกการหัก/เพิ่มคะแนน
                     </button>
 
                     <div class="grid grid-cols-2 gap-4 w-full mt-2">
                         <button onclick="switchView('view-criteria')" class="btn-press w-full bg-white/5 border border-white/10 text-slate-200 font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-white/10 transition text-sm">
                             <i class="fa-solid fa-scale-balanced text-primary-light"></i> เกณฑ์คะแนน
                         </button>
-                        <button onclick="openSettingsView()" class="btn-press w-full bg-white/5 border border-white/10 text-slate-200 font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-white/10 transition text-sm">
+                        <button onclick="requestTeacherAccess('settings')" class="btn-press w-full bg-white/5 border border-white/10 text-slate-200 font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-white/10 transition text-sm">
                             <i class="fa-solid fa-gear text-slate-400"></i> ตั้งค่าแอป
                         </button>
                     </div>
 
                 </div>
                 
-                <!-- System Error Message -->
                 <div id="system-error-msg" class="hidden mt-6 w-full text-left bg-red-500/10 border border-red-500/30 p-5 rounded-2xl backdrop-blur-md">
                     <div class="flex items-center gap-2 mb-2 text-red-400 font-bold">
                         <i class="fa-solid fa-triangle-exclamation"></i>
@@ -253,22 +275,22 @@
             </div>
         </section>
 
-        <!-- ================= VIEW 2: DASHBOARD ================= -->
         <section id="view-dashboard" class="hidden flex flex-col flex-1 h-full w-full">
             <div class="flex items-center justify-between mb-6 shrink-0 pt-2">
                 <div class="flex items-center gap-4">
                     <button class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 btn-press hover:bg-white/10 transition" onclick="switchView('view-home')">
                         <i class="fa-solid fa-arrow-left text-lg"></i>
                     </button>
-                    <h2 class="text-3xl font-extrabold text-gradient tracking-tight">ภาพรวมคะแนน</h2>
+                    <h2 class="text-3xl font-extrabold text-gradient tracking-tight">เช็คคะแนน</h2>
                 </div>
             </div>
             
             <div class="mb-5 shrink-0 w-full">
                 <div class="relative w-full">
                     <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" id="searchStudent" class="input-field pl-12 rounded-2xl py-4" placeholder="ค้นหาชื่อนักเรียน..." onkeyup="filterDashboard()">
+                    <input type="text" id="searchStudent" class="input-field pl-12 rounded-2xl py-4" placeholder="พิมพ์ชื่อนักเรียนเพื่อค้นหา..." onkeyup="filterDashboard()">
                 </div>
+                <p class="text-xs text-center text-slate-400 mt-3 font-medium"><i class="fa-solid fa-hand-pointer mr-1"></i> แตะที่การ์ดเพื่อดูรายละเอียดการหักคะแนน</p>
             </div>
             
             <div class="overflow-y-auto scroll-fine flex-1 space-y-4 pb-10 pr-1" id="dashboard-container">
@@ -276,7 +298,6 @@
             </div>
         </section>
 
-        <!-- ================= VIEW 3: RECORD FORM ================= -->
         <section id="view-form" class="hidden flex flex-col flex-1 h-full w-full">
             <div class="flex items-center justify-between mb-6 shrink-0 pt-2">
                 <div class="flex items-center gap-4">
@@ -318,13 +339,12 @@
                     </div>
 
                     <button type="submit" id="btn-submit-form" class="btn-press w-full btn-primary font-bold text-lg py-5 rounded-[1.25rem] shadow-xl flex items-center justify-center gap-3 mt-4">
-                        <i class="fa-solid fa-cloud-arrow-up"></i> บันทึกข้อมูล
+                        <i class="fa-solid fa-cloud-arrow-up"></i> ยืนยันบันทึกข้อมูล
                     </button>
                 </form>
             </div>
         </section>
 
-        <!-- ================= VIEW 4: CRITERIA ================= -->
         <section id="view-criteria" class="hidden flex flex-col flex-1 h-full w-full">
             <div class="flex items-center justify-between mb-6 shrink-0 pt-2">
                 <div class="flex items-center gap-4">
@@ -336,7 +356,6 @@
             </div>
             
             <div class="overflow-y-auto scroll-fine flex-1 space-y-5 pr-1 pb-6">
-                
                 <div class="glass-panel rounded-2xl p-6 border-l-4 border-l-red-500">
                     <h3 class="text-sm font-bold text-red-400 uppercase tracking-widest mb-4 flex items-center gap-2"><i class="fa-solid fa-shield-halved"></i> มาตรการควบคุม</h3>
                     <div class="space-y-3">
@@ -371,11 +390,9 @@
                         </table>
                     </div>
                 </div>
-
             </div>
         </section>
 
-        <!-- ================= VIEW 5: SETTINGS ================= -->
         <section id="view-settings" class="hidden flex-1 flex flex-col h-full">
             <div class="flex items-center justify-between mb-6 shrink-0 pt-2">
                 <div class="flex items-center gap-4">
@@ -387,7 +404,6 @@
             </div>
             
             <div class="overflow-y-auto scroll-fine pr-1 pb-6 flex-1 space-y-5">
-                
                 <div class="glass-panel rounded-2xl p-6">
                     <h3 class="text-xs font-bold text-primary-light uppercase tracking-widest mb-4 flex items-center gap-2"><i class="fa-solid fa-school"></i> ข้อมูลโรงเรียน / โลโก้</h3>
                     <input type="text" id="set-school-name" class="input-field mb-5" placeholder="ชื่อโรงเรียน" value="ระบบคะแนนความประพฤติ">
@@ -432,7 +448,6 @@
                             </div>
                             <input type="range" id="set-bg-blur" min="0" max="100" value="50" class="w-full accent-primary" oninput="previewBgBlur(this.value)">
                         </div>
-
                         <div>
                             <div class="flex justify-between items-center mb-2">
                                 <label class="text-xs font-medium text-slate-300">ความทึบของการ์ด</label>
@@ -440,7 +455,6 @@
                             </div>
                             <input type="range" id="set-card-opacity" min="0" max="100" value="10" class="w-full accent-primary" oninput="previewCardOpacity(this.value)">
                         </div>
-
                         <div>
                             <div class="flex justify-between items-center mb-2">
                                 <label class="text-xs font-medium text-slate-300">ความเบลอของการ์ด</label>
@@ -450,7 +464,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="pt-4 shrink-0">
                 <button onclick="saveSettings()" class="btn-press w-full btn-primary font-bold py-5 rounded-[1.25rem] shadow-xl text-lg flex items-center justify-center gap-3">
@@ -462,11 +475,16 @@
 
     <script>
         // ==========================================
-        // URL ของ Web App จาก Google Apps Script
+        // 1. URL เว็บแอป (แก้ไขตามที่ Deploy ได้เลย)
         // ==========================================
         const CONFIG = {
             GAS_URL: "https://script.google.com/macros/s/AKfycbzXOpgeURgwV8IcZFIFJtx5M1oKbs3eDFXr-XRh1ZCmPe3E8ia__PGh3FLDoiotDJ_n/exec" 
         };
+
+        // ==========================================
+        // 2. รหัสผ่านเฉพาะครูผู้สอน
+        // ==========================================
+        const TEACHER_PIN = "1234";
 
         const offenseList = [
             { text: "-- เลือกฐานความผิด/รายการ --", value: "", points: "", editable: false },
@@ -488,6 +506,7 @@
         ];
 
         let cachedStudents = [];
+        let targetViewAfterPin = "";
 
         const DEFAULT_PREFS = { 
             schoolName: "ระบบคะแนนความประพฤติ", 
@@ -531,7 +550,7 @@
                     let blurVal = earlyPrefs.customBgBlur !== undefined ? earlyPrefs.customBgBlur : 50;
                     overlay.style.backdropFilter = `blur(${blurVal / 5}px)`;
                     overlay.style.webkitBackdropFilter = `blur(${blurVal / 5}px)`;
-                    overlay.style.background = `rgba(15,23,42,${(blurVal / 100) * 0.8})`;
+                    overlay.style.background = `rgba(15, 23, 42, ${(blurVal / 100) * 0.8})`;
                     overlay.classList.remove('hidden');
                     s1.style.display = 'none'; s2.style.display = 'none';
                 } else {
@@ -580,25 +599,14 @@
         function checkPwaInstall() {
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
             if (isStandalone) return;
-
             setTimeout(() => {
                 const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
                 const modal = document.getElementById('pwa-install-modal');
                 const btnInstall = document.getElementById('btn-pwa-install');
-                
                 if(!modal) return;
-                if (isIos()) {
-                    btnInstall.style.display = 'none'; 
-                    modal.classList.add('active');
-                } else if(btnInstall) {
-                    btnInstall.onclick = async () => {
-                        if (deferredPrompt) {
-                            deferredPrompt.prompt();
-                            await deferredPrompt.userChoice;
-                            deferredPrompt = null;
-                            modal.classList.remove('active');
-                        }
-                    };
+                if (isIos()) { btnInstall.style.display = 'none'; modal.classList.add('active'); } 
+                else if(btnInstall) {
+                    btnInstall.onclick = async () => { if (deferredPrompt) { deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; modal.classList.remove('active'); } };
                     modal.classList.add('active');
                 }
             }, 3000);
@@ -606,10 +614,8 @@
 
         let confirmCallback = null;
         function showConfirm(title, message, callback) {
-            document.getElementById('confirm-title').innerText = title;
-            document.getElementById('confirm-msg').innerText = message;
-            confirmCallback = callback;
-            document.getElementById('confirm-modal').classList.add('active');
+            document.getElementById('confirm-title').innerText = title; document.getElementById('confirm-msg').innerText = message;
+            confirmCallback = callback; document.getElementById('confirm-modal').classList.add('active');
         }
         function closeConfirm() { document.getElementById('confirm-modal').classList.remove('active'); confirmCallback = null; }
         document.getElementById('btn-confirm-ok').onclick = () => { if(confirmCallback) confirmCallback(); closeConfirm(); };
@@ -617,17 +623,40 @@
 
         function showToast(msg, iconClass) {
             const t = document.getElementById('toast');
-            document.getElementById('toast-message').innerText = msg;
-            document.getElementById('toast-icon').innerHTML = `<i class="${iconClass}"></i>`;
+            document.getElementById('toast-message').innerText = msg; document.getElementById('toast-icon').innerHTML = `<i class="${iconClass}"></i>`;
             t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
         }
 
         function switchView(viewId) {
             ['view-splash', 'view-home', 'view-settings', 'view-dashboard', 'view-form', 'view-criteria'].forEach(id => {
                 const el = document.getElementById(id);
-                if(!el) return;
-                el.classList.toggle('hidden', id !== viewId);
+                if(!el) return; el.classList.toggle('hidden', id !== viewId);
             });
+        }
+
+        // ------------------ PIN System ------------------
+        function requestTeacherAccess(viewTarget) {
+            targetViewAfterPin = viewTarget;
+            document.getElementById('pin-input').value = '';
+            document.getElementById('pin-modal').classList.add('active');
+            setTimeout(() => document.getElementById('pin-input').focus(), 300);
+        }
+
+        function closePinModal() {
+            document.getElementById('pin-modal').classList.remove('active');
+            targetViewAfterPin = "";
+        }
+
+        function verifyPin() {
+            const input = document.getElementById('pin-input').value;
+            if (input === TEACHER_PIN) {
+                closePinModal();
+                if (targetViewAfterPin === 'form') openFormView();
+                else if (targetViewAfterPin === 'settings') openSettingsView();
+            } else {
+                showToast("รหัสผ่านไม่ถูกต้อง", "fa-solid fa-lock text-red-400");
+                document.getElementById('pin-input').value = '';
+            }
         }
 
         function fetchStudentData() {
@@ -644,10 +673,8 @@
                         cachedStudents = res.data;
                         renderDashboard(cachedStudents);
                         populateStudentDropdown(cachedStudents);
-                        setTimeout(() => switchView('view-home'), 800); // Add tiny delay for splash effect
-                    } else {
-                        throw new Error(res.error || "เกิดข้อผิดพลาดในการดึงข้อมูล");
-                    }
+                        setTimeout(() => switchView('view-home'), 800); 
+                    } else throw new Error(res.error || "เกิดข้อผิดพลาดในการดึงข้อมูล");
                 })
                 .catch(err => {
                     const errM = document.getElementById('system-error-msg'); if(errM) errM.classList.remove('hidden');
@@ -682,17 +709,13 @@
             const selectedOpt = select.options[select.selectedIndex];
             const pointsInput = document.getElementById('pointsInput');
 
-            if(selectedOpt.value === "") {
-                pointsInput.value = ""; pointsInput.disabled = false; return;
-            }
+            if(selectedOpt.value === "") { pointsInput.value = ""; pointsInput.disabled = false; return; }
 
             pointsInput.value = selectedOpt.dataset.points;
             if(selectedOpt.dataset.editable === "true") {
                 if(selectedOpt.dataset.points == 0) pointsInput.value = ""; 
                 pointsInput.disabled = false; pointsInput.focus();
-            } else {
-                pointsInput.disabled = true;
-            }
+            } else { pointsInput.disabled = true; }
         }
 
         function renderDashboard(students) {
@@ -705,32 +728,77 @@
                 return;
             }
 
-            students.forEach(student => {
+            students.forEach((student, index) => {
                 let borderCol = 'border-l-emerald-500';
                 let statusText = 'ปกติ / ปลอดภัย';
                 let statusClass = 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
 
-                if (student.score <= 0) {
-                    borderCol = 'border-l-red-500'; statusText = 'วิกฤต/พักการเรียน'; statusClass = 'bg-red-500/10 text-red-400 border border-red-500/20';
-                } else if (student.score <= 30) {
-                    borderCol = 'border-l-amber-500'; statusText = 'เฝ้าระวัง/แจ้งผู้ปกครอง'; statusClass = 'bg-amber-500/10 text-amber-400 border border-amber-500/20';
+                if (student.score <= 0) { borderCol = 'border-l-red-500'; statusText = 'วิกฤต/พักการเรียน'; statusClass = 'bg-red-500/10 text-red-400 border border-red-500/20'; } 
+                else if (student.score <= 30) { borderCol = 'border-l-amber-500'; statusText = 'เฝ้าระวัง/แจ้งผู้ปกครอง'; statusClass = 'bg-amber-500/10 text-amber-400 border border-amber-500/20'; }
+
+                // Build History HTML
+                let historyHtml = '<div class="text-center text-xs text-slate-400 py-3"><i class="fa-solid fa-folder-open mb-1"></i><br>ไม่มีประวัติการหักคะแนน</div>';
+                if (student.history && student.history.length > 0) {
+                    historyHtml = student.history.map(record => {
+                        // Date formatting assuming ISO or readable format from sheet
+                        let dObj = new Date(record.date);
+                        let dateStr = isNaN(dObj) ? record.date : `${dObj.getDate()}/${dObj.getMonth()+1}/${dObj.getFullYear()+543}`;
+                        let ptsColor = record.points > 0 ? "text-emerald-400" : "text-red-400";
+                        let ptsSign = record.points > 0 ? "+" : "";
+                        
+                        return `
+                        <div class="bg-black/20 rounded-xl p-3 mb-2 border border-white/5 relative overflow-hidden">
+                            <div class="flex justify-between items-start mb-1">
+                                <div class="font-semibold text-slate-200 text-[13px] leading-tight pr-4">${record.offense}</div>
+                                <div class="font-inter font-bold ${ptsColor} text-sm whitespace-nowrap">${ptsSign}${record.points}</div>
+                            </div>
+                            <div class="flex justify-between items-end mt-2">
+                                <div class="text-[10px] text-slate-400"><i class="fa-regular fa-calendar mr-1"></i>${dateStr}</div>
+                                ${record.notes && record.notes !== "-" ? `<div class="text-[10px] text-slate-500 italic max-w-[60%] text-right truncate">"${record.notes}"</div>` : ''}
+                            </div>
+                        </div>`;
+                    }).join('');
                 }
 
                 container.innerHTML += `
-                    <div class="student-card-item glass-panel rounded-[1.25rem] p-5 shadow-lg border-l-4 ${borderCol} fade-in" data-name="${student.name.toLowerCase()}">
+                    <div class="student-card-item glass-panel rounded-[1.25rem] p-5 shadow-lg border-l-4 ${borderCol} fade-in cursor-pointer hover:bg-white/5 transition-colors" data-name="${student.name.toLowerCase()}" onclick="toggleStudentDetails(${index})">
                         <div class="flex justify-between items-center mb-3">
-                            <h3 class="text-base font-bold text-white tracking-wide">${student.name}</h3>
-                            <div class="w-12 h-12 rounded-xl flex items-center justify-center font-inter font-bold text-lg ${statusClass}">
-                                ${student.score}
+                            <div class="flex-1 pr-3">
+                                <h3 class="text-base font-bold text-white tracking-wide">${student.name}</h3>
+                                <div class="text-xs text-slate-400 mt-1 flex items-center gap-2">
+                                    <span class="px-2 py-0.5 rounded-md ${statusClass} font-semibold">${statusText}</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="w-12 h-12 rounded-xl flex items-center justify-center font-inter font-bold text-lg ${statusClass} shadow-inner">
+                                    ${student.score}
+                                </div>
+                                <i class="fa-solid fa-chevron-down text-slate-500 text-[10px] chevron-icon"></i>
                             </div>
                         </div>
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="text-slate-400 font-medium">คะแนนคงเหลือ</span>
-                            <span class="px-3 py-1 rounded-lg ${statusClass} font-semibold">${statusText}</span>
+                        
+                        <div class="student-details-panel" id="student-details-${index}" onclick="event.stopPropagation()">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-clock-rotate-left"></i> ประวัติการบันทึก
+                            </h4>
+                            <div class="max-h-48 overflow-y-auto scroll-fine pr-1">
+                                ${historyHtml}
+                            </div>
                         </div>
                     </div>
                 `;
             });
+        }
+
+        function toggleStudentDetails(index) {
+            // ปิดการ์ดอื่นก่อน (ถ้าต้องการเปิดทีละใบ) - ลบ 3 บรรทัดนี้ออกถ้าอยากเปิดพร้อมกันหลายใบ
+            document.querySelectorAll('.student-card-item.expanded').forEach((el, i) => {
+                if (el.getAttribute('data-index') != index) el.classList.remove('expanded');
+            });
+
+            const card = document.querySelectorAll('.student-card-item')[index];
+            card.setAttribute('data-index', index);
+            card.classList.toggle('expanded');
         }
 
         function populateStudentDropdown(students) {
@@ -747,9 +815,7 @@
         function filterDashboard() {
             const query = document.getElementById('searchStudent').value.toLowerCase();
             const items = document.querySelectorAll('.student-card-item');
-            items.forEach(item => {
-                item.style.display = item.dataset.name.includes(query) ? 'block' : 'none';
-            });
+            items.forEach(item => { item.style.display = item.dataset.name.includes(query) ? 'block' : 'none'; });
         }
 
         function openFormView() {
@@ -759,16 +825,13 @@
 
         function submitForm(event) {
             event.preventDefault();
-            
             const studentName = document.getElementById('studentSelect').value;
             const offense = document.getElementById('offenseSelect').value;
             const points = document.getElementById('pointsInput').value;
             const notes = document.getElementById('notesInput').value;
             const date = document.getElementById('recordDate').value;
 
-            if(!studentName || !offense || points === "") {
-                return showToast("กรุณากรอกข้อมูลให้ครบ", "fa-solid fa-circle-exclamation text-amber-400");
-            }
+            if(!studentName || !offense || points === "") return showToast("กรุณากรอกข้อมูลให้ครบ", "fa-solid fa-circle-exclamation text-amber-400");
 
             showConfirm('ยืนยันการบันทึก', `บันทึกรายการสำหรับ: ${studentName}`, () => {
                 const btn = document.getElementById('btn-submit-form');
@@ -789,10 +852,8 @@
                         document.getElementById('behaviorForm').reset();
                         document.getElementById('pointsInput').disabled = false;
                         switchView('view-splash');
-                        fetchStudentData();
-                    } else {
-                        showToast(res.error || "บันทึกล้มเหลว", "fa-solid fa-triangle-exclamation text-red-400");
-                    }
+                        fetchStudentData(); // โหลดใหม่เพื่อดึงประวัติล่าสุด
+                    } else showToast(res.error || "บันทึกล้มเหลว", "fa-solid fa-triangle-exclamation text-red-400");
                 })
                 .catch(err => {
                     btn.innerHTML = originalHtml; btn.disabled = false;
@@ -806,16 +867,13 @@
             document.getElementById('set-school-name').value = earlyPrefs.schoolName;
             
             let blurBgVal = earlyPrefs.customBgBlur !== undefined ? earlyPrefs.customBgBlur : 50;
-            document.getElementById('set-bg-blur').value = blurBgVal; 
-            document.getElementById('display-bg-blur').innerText = blurBgVal + '%';
+            document.getElementById('set-bg-blur').value = blurBgVal; document.getElementById('display-bg-blur').innerText = blurBgVal + '%';
             
             let opVal = earlyPrefs.cardOpacity !== undefined ? earlyPrefs.cardOpacity : 10;
-            document.getElementById('set-card-opacity').value = opVal; 
-            document.getElementById('display-card-opacity').innerText = opVal + '%';
+            document.getElementById('set-card-opacity').value = opVal; document.getElementById('display-card-opacity').innerText = opVal + '%';
             
             let blurCardVal = earlyPrefs.cardBlur !== undefined ? earlyPrefs.cardBlur : 24;
-            document.getElementById('set-card-blur').value = blurCardVal; 
-            document.getElementById('display-card-blur').innerText = blurCardVal + 'px';
+            document.getElementById('set-card-blur').value = blurCardVal; document.getElementById('display-card-blur').innerText = blurCardVal + 'px';
             
             switchView('view-settings'); 
         }
@@ -824,18 +882,13 @@
             document.getElementById('set-bg-blur').value = earlyPrefs.customBgBlur !== undefined ? earlyPrefs.customBgBlur : 50;
             document.getElementById('set-card-opacity').value = earlyPrefs.cardOpacity !== undefined ? earlyPrefs.cardOpacity : 10;
             document.getElementById('set-card-blur').value = earlyPrefs.cardBlur !== undefined ? earlyPrefs.cardBlur : 24;
-            applyPrefs(); 
-            switchView('view-home');
+            applyPrefs(); switchView('view-home');
         }
 
         function previewBgBlur(val) {
             document.getElementById('display-bg-blur').innerText = val + '%';
             const overlay = document.getElementById('custom-bg-overlay');
-            if(overlay) {
-                overlay.style.backdropFilter = `blur(${val / 5}px)`;
-                overlay.style.webkitBackdropFilter = `blur(${val / 5}px)`;
-                overlay.style.background = `rgba(15,23,42,${(val / 100) * 0.8})`;
-            }
+            if(overlay) { overlay.style.backdropFilter = `blur(${val / 5}px)`; overlay.style.webkitBackdropFilter = `blur(${val / 5}px)`; overlay.style.background = `rgba(15, 23, 42, ${(val / 100) * 0.8})`; }
         }
         function previewCardOpacity(val) { document.documentElement.style.setProperty('--glass-opacity', val / 100); document.getElementById('display-card-opacity').innerText = val + '%'; }
         function previewCardBlur(val) { document.documentElement.style.setProperty('--glass-blur', val + 'px'); document.getElementById('display-card-blur').innerText = val + 'px'; }
@@ -880,16 +933,8 @@
             earlyPrefs.customBgBlur = parseInt(document.getElementById('set-bg-blur').value);
             earlyPrefs.cardOpacity = parseInt(document.getElementById('set-card-opacity').value);
             earlyPrefs.cardBlur = parseInt(document.getElementById('set-card-blur').value);
-            
-            try { 
-                localStorage.setItem('behaviorApp_prefs', JSON.stringify(earlyPrefs)); 
-                applyPrefs(); 
-                showToast('บันทึกการตั้งค่าสำเร็จ', 'fa-solid fa-check text-emerald-400'); 
-                switchView('view-home'); 
-            } catch (e) { 
-                showToast('หน่วยความจำเต็ม ไม่สามารถเซฟภาพได้', 'fa-solid fa-triangle-exclamation text-red-400'); 
-                clearCustomBackground(); 
-            }
+            try { localStorage.setItem('behaviorApp_prefs', JSON.stringify(earlyPrefs)); applyPrefs(); showToast('บันทึกการตั้งค่าสำเร็จ', 'fa-solid fa-check text-emerald-400'); switchView('view-home'); } 
+            catch (e) { showToast('หน่วยความจำเต็ม ไม่สามารถเซฟภาพได้', 'fa-solid fa-triangle-exclamation text-red-400'); clearCustomBackground(); }
         }
     </script>
 </body>
