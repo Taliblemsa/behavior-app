@@ -531,7 +531,7 @@
                         <div class="flex justify-between items-center"><span class="font-bold text-slate-500 text-[14px]">คะแนนคงเหลือ:</span><span class="font-black text-[18px]" id="export-slip-score"></span></div>
                     </div>
                     
-                    <h4 class="text-[12px] font-black text-slate-700 uppercase tracking-widest mb-3 border-b border-slate-200 pb-2"><i class="fa-solid fa-clock-rotate-left text-slate-400 mr-1"></i> ประวัติการบันทึก (5 รายการล่าสุด)</h4>
+                    <h4 id="slip-history-header" class="text-[12px] font-black text-slate-700 uppercase tracking-widest mb-3 border-b border-slate-200 pb-2"><i class="fa-solid fa-clock-rotate-left text-slate-400 mr-1"></i> สรุปประวัติทั้งหมด</h4>
                     <div id="export-slip-history" class="space-y-3 relative z-10 min-h-[100px]"></div>
                     
                     <div class="mt-6 pt-4 border-t border-dashed border-slate-300 text-center relative z-10">
@@ -977,32 +977,55 @@
             const now = new Date();
             document.getElementById('export-slip-date').innerText = `ข้อมูล ณ วันที่ ${now.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' })} เวลา ${now.toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'})}`;
             
-            // นำประวัติใส่สลิป
+            // นำประวัติใส่สลิป (จัดกลุ่มรายการซ้ำ)
             const historyContainer = document.getElementById('export-slip-history');
             if (student.history && student.history.length > 0) {
-                let historyHtml = student.history.slice(0, 5).map(record => {
-                    let dObj = new Date(record.date);
-                    let dateStr = isNaN(dObj) ? record.date : `${dObj.getDate()} ${['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'][dObj.getMonth()]} ${dObj.getFullYear()+543}`;
-                    let ptsColor = record.points > 0 ? "text-emerald-600" : "text-red-600";
-                    let ptsSign = record.points > 0 ? "+" : "";
+                // 1. จัดกลุ่มข้อมูล (Aggregate)
+                let grouped = {};
+                student.history.forEach(record => {
+                    let key = record.offense;
+                    // ถ้าเป็น "อื่นๆ" ให้รวม note ด้วยเพื่อแยกความผิดที่ไม่เหมือนกัน
+                    if(key === "อื่นๆ") key = record.offense + "_" + record.notes;
                     
+                    if (!grouped[key]) {
+                        grouped[key] = {
+                            offense: record.offense,
+                            count: 0,
+                            totalPoints: 0,
+                            latestDate: record.date,
+                            notes: record.notes
+                        };
+                    }
+                    grouped[key].count++;
+                    grouped[key].totalPoints += Number(record.points);
+                });
+
+                let aggregatedArray = Object.values(grouped);
+
+                let historyHtml = aggregatedArray.map(record => {
+                    let dObj = new Date(record.latestDate);
+                    let dateStr = isNaN(dObj) ? record.latestDate : `${dObj.getDate()} ${['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'][dObj.getMonth()]} ${dObj.getFullYear()+543}`;
+                    
+                    let ptsColor = record.totalPoints > 0 ? "text-emerald-600" : "text-red-600";
+                    let ptsSign = record.totalPoints > 0 ? "+" : "";
+                    
+                    let dateLabel = record.count > 1 ? "ล่าสุด: " + dateStr : dateStr;
+                    let countLabel = record.count > 1 ? `<span class="text-amber-600 font-black ml-1 bg-amber-100 px-1.5 py-0.5 rounded text-[10px]">x${record.count}</span>` : "";
+
                     return `
                     <div class="bg-white border border-slate-100 rounded-xl p-3 shadow-sm relative overflow-hidden">
-                        <div class="absolute left-0 top-0 bottom-0 w-1.5 ${record.points > 0 ? 'bg-emerald-400' : 'bg-red-400'}"></div>
+                        <div class="absolute left-0 top-0 bottom-0 w-1.5 ${record.totalPoints > 0 ? 'bg-emerald-400' : 'bg-red-400'}"></div>
                         <div class="flex justify-between items-start pl-3">
                             <div class="flex-1 pr-2">
-                                <div class="font-black text-accent text-[13px] leading-tight">${record.offense}</div>
-                                <div class="text-[10px] text-slate-500 mt-1"><i class="fa-regular fa-calendar mr-1"></i> ${dateStr}</div>
+                                <div class="font-black text-accent text-[13px] leading-tight flex items-center flex-wrap gap-1">${record.offense} ${countLabel}</div>
+                                <div class="text-[10px] text-slate-500 mt-1.5"><i class="fa-regular fa-calendar mr-1"></i> ${dateLabel}</div>
                                 ${record.notes && record.notes !== "-" ? `<div class="text-[10px] text-slate-400 italic mt-0.5 truncate">"${record.notes}"</div>` : ''}
                             </div>
-                            <div class="font-black ${ptsColor} text-[14px] bg-slate-50 px-2 py-1 rounded border border-slate-100 shadow-inner">${ptsSign}${record.points}</div>
+                            <div class="font-black ${ptsColor} text-[14px] bg-slate-50 px-2 py-1 rounded border border-slate-100 shadow-inner">${ptsSign}${record.totalPoints}</div>
                         </div>
                     </div>`;
                 }).join('');
                 
-                if (student.history.length > 5) {
-                    historyHtml += `<div class="text-center text-[10px] text-slate-400 font-bold mt-2 border-t border-dashed border-slate-200 pt-2">และรายการอื่นๆ ก่อนหน้า...</div>`;
-                }
                 historyContainer.innerHTML = historyHtml;
             } else {
                 historyContainer.innerHTML = `<div class="text-center py-6 border-2 border-dashed border-emerald-200 bg-emerald-50 rounded-[16px]"><div class="w-10 h-10 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-2 text-xl shadow-sm"><i class="fa-solid fa-check"></i></div><p class="font-black text-emerald-600 text-[13px]">ไม่พบประวัติการหักคะแนน</p></div>`;
