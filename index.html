@@ -178,110 +178,6 @@
         .logo-pulse { animation: logo-bounce 2s infinite ease-in-out; }
         section { transition: none !important; transform: none !important; animation: none !important; }
     </style>
-
-    <script>
-        // ==========================================
-        // จุดที่สำคัญที่สุด! 
-        // ให้นำ URL จาก Apps Script มาวางแทนที่ข้อความด้านล่างนี้
-        // ==========================================
-        const CONFIG = {
-            GAS_URL: "วาง_WEB_APP_URL_ของคุณครูที่นี่" 
-        };
-
-        // ฐานความผิดทั้งหมด
-        const offenseList = [
-            { text: "-- เลือกฐานความผิด/รายการ --", value: "", points: "", editable: false },
-            { text: "ขาดเรียนไม่มีใบลา (ขร) [-10]", value: "ขาดเรียนไม่มีใบลา(ขร)", points: -10, editable: false },
-            { text: "ขาดแถว (ส) [-5]", value: "ขาดแถว(ส)", points: -5, editable: false },
-            { text: "สายแถว (สถ) [-3]", value: "สายแถว(สถ)", points: -3, editable: false },
-            { text: "โดดเรียน [-5]", value: "โดดเรียน", points: -5, editable: false },
-            { text: "แสดงกิริยาก้าวร้าว [-30]", value: "แสดงกิริยาก้าวร้าว", points: -30, editable: false },
-            { text: "ทะเลาะวิวาท [-30]", value: "ทะเลาะวิวาท", points: -30, editable: false },
-            { text: "ชู้สาว/เบี่ยงเบนทางเพศ (*ดุลพินิจ)", value: "ชู้สาว/เบี่ยงเบนทางเพศ", points: 0, editable: true },
-            { text: "หนีออกนอกโรงเรียน (*ดุลพินิจ)", value: "หนีออกนอกโรงเรียน", points: 0, editable: true },
-            { text: "ยาเสพติด (*ดุลพินิจ)", value: "ยาเสพติด", points: 0, editable: true },
-            { text: "โทรศัพท์ (*ดุลพินิจ)", value: "โทรศัพท์", points: 0, editable: true },
-            { text: "ทำลายทรัพย์สินโรงเรียน (ชดใช้ค่าเสียหาย) [-20 ถึง -70]", value: "ทำลายทรัพย์สินโรงเรียน", points: -20, editable: true },
-            { text: "มาโรงเรียนสาย [-5]", value: "มาโรงเรียนสาย", points: -5, editable: false },
-            { text: "ขาดละหมาด [-5]", value: "ขาดละหมาด", points: -5, editable: false },
-            { text: "ทำความดี / กู้คะแนน (*ดุลพินิจ) [+]", value: "ทำความดี/กู้คะแนน", points: 0, editable: true },
-            { text: "อื่นๆ", value: "อื่นๆ", points: 0, editable: true }
-        ];
-
-        let cachedStudents = [];
-
-        // การตั้งค่าแอปเบื้องต้น
-        const DEFAULT_PREFS = { 
-            schoolName: "ระบบคะแนนความประพฤติ", 
-            schoolLogo: "ส.ธ.", 
-            customLogo: "https://cdn-icons-png.flaticon.com/512/2940/2940653.png", 
-            theme: "theme-amber", 
-            customBg: null,
-            customBgBlur: 50,
-            cardOpacity: 15,
-            cardBlur: 25
-        };
-        
-        let earlyPrefs = JSON.parse(localStorage.getItem('behaviorApp_prefs')) || DEFAULT_PREFS;
-        if(earlyPrefs.customLogo === undefined || earlyPrefs.customLogo === null) earlyPrefs.customLogo = "https://cdn-icons-png.flaticon.com/512/2940/2940653.png";
-        if(earlyPrefs.cardOpacity === undefined) earlyPrefs.cardOpacity = 15;
-        if(earlyPrefs.cardBlur === undefined) earlyPrefs.cardBlur = 25;
-        if(earlyPrefs.customBgBlur === undefined) earlyPrefs.customBgBlur = 50;
-
-        function applyPrefs() {
-            document.documentElement.style.setProperty('--glass-opacity', earlyPrefs.cardOpacity / 100);
-            document.documentElement.style.setProperty('--glass-blur', earlyPrefs.cardBlur + 'px');
-            
-            const appBody = document.getElementById('app-body');
-            if(appBody) appBody.className = `flex flex-col items-center min-h-screen pt-[max(env(safe-area-inset-top),1rem)] ${earlyPrefs.theme}`;
-            
-            const metaTheme = document.getElementById('meta-theme-color');
-            if (metaTheme) {
-                if (earlyPrefs.customBg) {
-                    metaTheme.setAttribute('content', 'transparent'); 
-                } else {
-                    const THEME_COLORS = {
-                        "theme-amber": "#fef3c7", "theme-blue": "#e0f2fe", "theme-emerald": "#dcfce7",
-                        "theme-rose": "#ffe4e6", "theme-violet": "#f3e8ff", "theme-slate": "#cbd5e1",
-                        "theme-cyan": "#cffafe", "theme-school": "#fef08a"
-                    };
-                    metaTheme.setAttribute('content', THEME_COLORS[earlyPrefs.theme] || 'transparent');
-                }
-            }
-
-            document.querySelectorAll('.app-school-name-display').forEach(el => el.innerText = earlyPrefs.schoolName);
-            
-            document.querySelectorAll('.app-logo-container').forEach(container => {
-                container.className = "w-24 h-24 bg-white rounded-full shadow-2xl flex items-center justify-center mb-6 relative overflow-hidden group app-logo-container logo-pulse p-2 border border-slate-100";
-                if(earlyPrefs.customLogo) {
-                    container.innerHTML = `<img src="${earlyPrefs.customLogo}" class="w-20 h-20 object-contain rounded-full relative z-10" alt="logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3596/3596091.png'">`;
-                } else {
-                    container.innerHTML = `<span class="text-[40px] font-black text-primary tracking-tighter relative z-10 app-logo-display text-shadow-none">${earlyPrefs.schoolLogo}</span>`;
-                }
-            });
-            
-            const bgContainer = document.getElementById('bg-container');
-            const overlay = document.getElementById('custom-bg-overlay');
-            const s1 = document.getElementById('def-sphere-1');
-            const s2 = document.getElementById('def-sphere-2');
-            
-            if(bgContainer && overlay && s1 && s2) {
-                if(earlyPrefs.customBg) {
-                    bgContainer.style.backgroundImage = `url(${earlyPrefs.customBg})`;
-                    let blurVal = earlyPrefs.customBgBlur !== undefined ? earlyPrefs.customBgBlur : 50;
-                    overlay.style.backdropFilter = `blur(${blurVal / 5}px)`;
-                    overlay.style.webkitBackdropFilter = `blur(${blurVal / 5}px)`;
-                    overlay.style.background = `rgba(255,255,255,${(blurVal / 100) * 0.4})`;
-                    overlay.classList.remove('hidden');
-                    s1.style.display = 'none'; s2.style.display = 'none';
-                } else {
-                    bgContainer.style.backgroundImage = 'none';
-                    overlay.classList.add('hidden');
-                    s1.style.display = 'block'; s2.style.display = 'block';
-                }
-            }
-        }
-    </script>
 </head>
 <body class="flex flex-col items-center min-h-screen pt-[max(env(safe-area-inset-top),1rem)]" id="app-body">
     
@@ -586,7 +482,7 @@
     <script>
         // ==========================================
         // จุดที่สำคัญที่สุด! 
-        // ให้นำ URL จาก Apps Script มาวางแทนที่ข้อความด้านล่างนี้
+        // URL จาก Apps Script ถูกใส่ไว้เรียบร้อยแล้ว
         // ==========================================
         const CONFIG = {
             GAS_URL: "https://script.google.com/macros/s/AKfycbzXOpgeURgwV8IcZFIFJtx5M1oKbs3eDFXr-XRh1ZCmPe3E8ia__PGh3FLDoiotDJ_n/exec" 
@@ -594,6 +490,111 @@
 
         // ฐานความผิดทั้งหมด
         const offenseList = [
+            { text: "-- เลือกฐานความผิด/รายการ --", value: "", points: "", editable: false },
+            { text: "ขาดเรียนไม่มีใบลา (ขร) [-10]", value: "ขาดเรียนไม่มีใบลา(ขร)", points: -10, editable: false },
+            { text: "ขาดแถว (ส) [-5]", value: "ขาดแถว(ส)", points: -5, editable: false },
+            { text: "สายแถว (สถ) [-3]", value: "สายแถว(สถ)", points: -3, editable: false },
+            { text: "โดดเรียน [-5]", value: "โดดเรียน", points: -5, editable: false },
+            { text: "แสดงกิริยาก้าวร้าว [-30]", value: "แสดงกิริยาก้าวร้าว", points: -30, editable: false },
+            { text: "ทะเลาะวิวาท [-30]", value: "ทะเลาะวิวาท", points: -30, editable: false },
+            { text: "ชู้สาว/เบี่ยงเบนทางเพศ (*ดุลพินิจ)", value: "ชู้สาว/เบี่ยงเบนทางเพศ", points: 0, editable: true },
+            { text: "หนีออกนอกโรงเรียน (*ดุลพินิจ)", value: "หนีออกนอกโรงเรียน", points: 0, editable: true },
+            { text: "ยาเสพติด (*ดุลพินิจ)", value: "ยาเสพติด", points: 0, editable: true },
+            { text: "โทรศัพท์ (*ดุลพินิจ)", value: "โทรศัพท์", points: 0, editable: true },
+            { text: "ทำลายทรัพย์สินโรงเรียน (ชดใช้ค่าเสียหาย) [-20 ถึง -70]", value: "ทำลายทรัพย์สินโรงเรียน", points: -20, editable: true },
+            { text: "มาโรงเรียนสาย [-5]", value: "มาโรงเรียนสาย", points: -5, editable: false },
+            { text: "ขาดละหมาด [-5]", value: "ขาดละหมาด", points: -5, editable: false },
+            { text: "ทำความดี / กู้คะแนน (*ดุลพินิจ) [+]", value: "ทำความดี/กู้คะแนน", points: 0, editable: true },
+            { text: "อื่นๆ", value: "อื่นๆ", points: 0, editable: true }
+        ];
+
+        let cachedStudents = [];
+
+        // การตั้งค่าแอปเบื้องต้น
+        const DEFAULT_PREFS = { 
+            schoolName: "ระบบคะแนนความประพฤติ", 
+            schoolLogo: "ส.ธ.", 
+            customLogo: "https://cdn-icons-png.flaticon.com/512/2940/2940653.png", 
+            theme: "theme-amber", 
+            customBg: null,
+            customBgBlur: 50,
+            cardOpacity: 15,
+            cardBlur: 25
+        };
+        
+        let earlyPrefs = JSON.parse(localStorage.getItem('behaviorApp_prefs')) || DEFAULT_PREFS;
+        if(earlyPrefs.customLogo === undefined || earlyPrefs.customLogo === null) earlyPrefs.customLogo = "https://cdn-icons-png.flaticon.com/512/2940/2940653.png";
+        if(earlyPrefs.cardOpacity === undefined) earlyPrefs.cardOpacity = 15;
+        if(earlyPrefs.cardBlur === undefined) earlyPrefs.cardBlur = 25;
+        if(earlyPrefs.customBgBlur === undefined) earlyPrefs.customBgBlur = 50;
+
+        function applyPrefs() {
+            document.documentElement.style.setProperty('--glass-opacity', earlyPrefs.cardOpacity / 100);
+            document.documentElement.style.setProperty('--glass-blur', earlyPrefs.cardBlur + 'px');
+            
+            const appBody = document.getElementById('app-body');
+            if(appBody) appBody.className = `flex flex-col items-center min-h-screen pt-[max(env(safe-area-inset-top),1rem)] ${earlyPrefs.theme}`;
+            
+            const metaTheme = document.getElementById('meta-theme-color');
+            if (metaTheme) {
+                if (earlyPrefs.customBg) {
+                    metaTheme.setAttribute('content', 'transparent'); 
+                } else {
+                    const THEME_COLORS = {
+                        "theme-amber": "#fef3c7", "theme-blue": "#e0f2fe", "theme-emerald": "#dcfce7",
+                        "theme-rose": "#ffe4e6", "theme-violet": "#f3e8ff", "theme-slate": "#cbd5e1",
+                        "theme-cyan": "#cffafe", "theme-school": "#fef08a"
+                    };
+                    metaTheme.setAttribute('content', THEME_COLORS[earlyPrefs.theme] || 'transparent');
+                }
+            }
+
+            document.querySelectorAll('.app-school-name-display').forEach(el => el.innerText = earlyPrefs.schoolName);
+            
+            document.querySelectorAll('.app-logo-container').forEach(container => {
+                container.className = "w-24 h-24 bg-white rounded-full shadow-2xl flex items-center justify-center mb-6 relative overflow-hidden group app-logo-container logo-pulse p-2 border border-slate-100";
+                if(earlyPrefs.customLogo) {
+                    container.innerHTML = `<img src="${earlyPrefs.customLogo}" class="w-20 h-20 object-contain rounded-full relative z-10" alt="logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3596/3596091.png'">`;
+                } else {
+                    container.innerHTML = `<span class="text-[40px] font-black text-primary tracking-tighter relative z-10 app-logo-display text-shadow-none">${earlyPrefs.schoolLogo}</span>`;
+                }
+            });
+            
+            const bgContainer = document.getElementById('bg-container');
+            const overlay = document.getElementById('custom-bg-overlay');
+            const s1 = document.getElementById('def-sphere-1');
+            const s2 = document.getElementById('def-sphere-2');
+            
+            if(bgContainer && overlay && s1 && s2) {
+                if(earlyPrefs.customBg) {
+                    bgContainer.style.backgroundImage = `url(${earlyPrefs.customBg})`;
+                    let blurVal = earlyPrefs.customBgBlur !== undefined ? earlyPrefs.customBgBlur : 50;
+                    overlay.style.backdropFilter = `blur(${blurVal / 5}px)`;
+                    overlay.style.webkitBackdropFilter = `blur(${blurVal / 5}px)`;
+                    overlay.style.background = `rgba(255,255,255,${(blurVal / 100) * 0.4})`;
+                    overlay.classList.remove('hidden');
+                    s1.style.display = 'none'; s2.style.display = 'none';
+                } else {
+                    bgContainer.style.backgroundImage = 'none';
+                    overlay.classList.add('hidden');
+                    s1.style.display = 'block'; s2.style.display = 'block';
+                }
+            }
+        }
+
+        // ==========================================
+        // โค้ดหลักเมื่อหน้าเว็บโหลดเสร็จ
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            const uploadEl = document.getElementById('set-bg-upload');
+            if(uploadEl) uploadEl.addEventListener('change', handleImageUpload);
+
+            const logoUploadEl = document.getElementById('set-logo-upload');
+            if(logoUploadEl) logoUploadEl.addEventListener('change', handleLogoUpload);
+            
+            checkPwaInstall();
+            initOffenses();
+            fetchStudentData(); // โค้ดสำคัญที่ใช้ดึงข้อมูล
             applyPrefs();
             setupPWA();
         });
@@ -695,7 +696,7 @@
                 return;
             }
 
-            // Fetch ผ่าน API แทน google.script.run
+            // Fetch ผ่าน API ไปที่ Google Apps Script
             fetch(CONFIG.GAS_URL + "?action=getStudents")
                 .then(res => res.json())
                 .then(res => {
@@ -703,7 +704,7 @@
                         cachedStudents = res.data;
                         renderDashboard(cachedStudents);
                         populateStudentDropdown(cachedStudents);
-                        switchView('view-home');
+                        switchView('view-home'); // เปลี่ยนหน้าจอเข้าสู่หน้าหลัก
                     } else {
                         throw new Error(res.error || "เกิดข้อผิดพลาดในการดึงข้อมูล");
                     }
