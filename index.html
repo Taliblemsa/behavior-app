@@ -644,15 +644,19 @@
 
         function closePinModal() {
             document.getElementById('pin-modal').classList.remove('active');
-            targetViewAfterPin = "";
         }
 
         function verifyPin() {
             const input = document.getElementById('pin-input').value;
             if (input === TEACHER_PIN) {
+                const target = targetViewAfterPin; // จำหน้าเป้าหมายไว้ก่อน
                 closePinModal();
-                if (targetViewAfterPin === 'form') openFormView();
-                else if (targetViewAfterPin === 'settings') openSettingsView();
+                
+                // ตรวจสอบและสลับหน้า
+                if (target === 'form') openFormView();
+                else if (target === 'settings') openSettingsView();
+                
+                targetViewAfterPin = ""; // เคลียร์ค่าทิ้งหลังจากสลับหน้าสำเร็จแล้ว
             } else {
                 showToast("รหัสผ่านไม่ถูกต้อง", "fa-solid fa-lock text-red-400");
                 document.getElementById('pin-input').value = '';
