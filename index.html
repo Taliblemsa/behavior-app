@@ -209,7 +209,7 @@
             <p class="text-[16px] font-extrabold text-slate-600 mt-2 tracking-wide opacity-90 glow-text text-center w-full app-school-name-display">กำลังโหลด...</p>
             <div class="mt-8 flex items-center justify-center gap-2 bg-white/40 px-5 py-2.5 rounded-full border border-white/60 shadow-sm backdrop-blur-md">
                 <i class="fa-solid fa-compact-disc fa-spin text-primary text-sm"></i>
-                <span class="text-[13px] font-black text-slate-700">กำลังเชื่อมต่อฐานข้อมูล...</span>
+                <span id="splash-loading-text" class="text-[13px] font-black text-slate-700">กำลังเชื่อมต่อฐานข้อมูล...</span>
             </div>
         </section>
 
@@ -659,10 +659,20 @@
 
         // ------------------ LOGIC & API ------------------
         function fetchStudentData() {
+            const loadingText = document.getElementById('splash-loading-text');
+            if (loadingText) loadingText.innerText = "กำลังเชื่อมต่อฐานข้อมูล...";
+            
+            // แจ้งเตือนหากเซิร์ฟเวอร์ Google ตอบสนองช้า (Cold Start)
+            const slowLoadTimer = setTimeout(() => {
+                if (loadingText) loadingText.innerText = "กำลังดึงข้อมูล... (อาจใช้เวลา 5-10 วินาที)";
+            }, 3000);
+
             fetch(CONFIG.GAS_URL + "?action=getStudents").then(res => res.json()).then(res => {
+                clearTimeout(slowLoadTimer);
                 if(res.success) { cachedStudents = res.data; renderDashboard(cachedStudents); switchView('view-home'); } 
                 else throw new Error(res.error);
             }).catch(err => {
+                clearTimeout(slowLoadTimer);
                 document.getElementById('system-error-msg').classList.remove('hidden');
                 document.getElementById('error-details').innerText = "เชื่อมต่อล้มเหลว: " + err.toString();
                 switchView('view-home');
@@ -830,33 +840,50 @@
             showConfirm('ยืนยันอัปเดตกลุ่ม', `บันทึกนักเรียน ${selectedStudentsList.length} คน x ${selectedOffensesList.length} ข้อหา\nรวมทั้งหมด ${totalTasks} รายการ ใช่หรือไม่?`, async () => {
                 const btn = document.getElementById('btn-submit-form'); const orig = btn.innerHTML;
                 btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังประมวลผลข้อมูล...`;
                 
-                let current = 0; let errorCount = 0;
-                
-                // Process sequentially to not overload backend
+                // จัดเตรียมแพ็กเกจข้อมูลส่งไปรวดเดียว (Batch Package)
+                let recordsPayload = [];
                 for(let stName of selectedStudentsList) {
                     for(let off of selectedOffensesList) {
-                        current++;
-                        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> บันทึก ${current}/${totalTasks}...`;
-                        
-                        try {
-                            const res = await fetch(CONFIG.GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'saveRecord', record: { studentName: stName, offense: off.name, points: off.points, notes: notes, date: date } }) });
-                            const data = await res.json();
-                            if(!data.success) errorCount++;
-                        } catch(e) { errorCount++; }
+                        recordsPayload.push({
+                            studentName: stName,
+                            offense: off.name,
+                            points: off.points,
+                            notes: notes,
+                            date: date
+                        });
                     }
                 }
                 
-                btn.innerHTML = orig; btn.disabled = false;
-                if(errorCount === 0) {
-                    showToast(`บันทึกเรียบร้อย (${totalTasks} รายการ)`, 'fa-solid fa-check text-emerald-400');
-                    // Clear selections but stay on page & keep date/notes
-                    selectedStudentsList = []; selectedOffensesList = [];
-                    renderSelectedStudents(); renderSelectedOffenses();
-                    document.getElementById('notesInput').value = ""; // clear notes for next person
-                    fetchStudentData(); // Update background data invisibly
-                } else {
-                    showToast(`มีข้อผิดพลาดบางรายการ (${errorCount}) ลองเช็คชีต`, "fa-solid fa-triangle-exclamation text-red-400");
+                try {
+                    // ส่งข้อมูลแบบกลุ่มไปยัง Google Apps Script (ลดภาระเซิร์ฟเวอร์ ไม่ค้าง)
+                    const res = await fetch(CONFIG.GAS_URL, { 
+                        method: 'POST', 
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({ action: 'saveBatchRecords', records: recordsPayload }) 
+                    });
+                    const data = await res.json();
+                    
+                    btn.innerHTML = orig; btn.disabled = false;
+                    
+                    if(data.success) {
+                        showToast(`บันทึกเรียบร้อย (${totalTasks} รายการ)`, 'fa-solid fa-check text-emerald-400');
+                        // ล้างค่าที่เลือก แต่คงหน้าและวันที่ไว้
+                        selectedStudentsList = []; selectedOffensesList = [];
+                        renderSelectedStudents(); renderSelectedOffenses();
+                        document.getElementById('notesInput').value = ""; 
+                        
+                        // แอบดึงข้อมูลคะแนนล่าสุดมาอัปเดตเบื้องหลัง (ไม่รบกวนการทำงานครู)
+                        fetch(CONFIG.GAS_URL + "?action=getStudents").then(r=>r.json()).then(r=>{
+                            if(r.success) { cachedStudents = r.data; renderDashboard(cachedStudents); }
+                        });
+                    } else {
+                        showToast(`เกิดข้อผิดพลาด: ${data.error}`, "fa-solid fa-triangle-exclamation text-red-400");
+                    }
+                } catch(e) { 
+                    btn.innerHTML = orig; btn.disabled = false;
+                    showToast(`เซิร์ฟเวอร์ขัดข้อง`, "fa-solid fa-triangle-exclamation text-red-400");
                 }
             });
         }
