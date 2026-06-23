@@ -395,7 +395,6 @@
                             <label class="text-[12px] font-black uppercase text-slate-700 tracking-widest glow-text">ฐานความผิด <span class="text-amber-500">*</span></label>
                             <span class="text-[10px] font-bold bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full" id="of-count-badge">0 รายการ</span>
                         </div>
-                        <!-- In the form, offenses will show with editable inputs -->
                         <div id="selected-offenses-container" class="space-y-2 mb-3 min-h-[40px] p-2 bg-white/30 rounded-xl border border-white/50 shadow-inner empty:hidden"></div>
                         <button type="button" onclick="openOffenseModal()" class="w-full bg-white border-2 border-dashed border-amber-300 text-amber-600 font-black py-3 rounded-xl text-[14px] flex items-center justify-center gap-2 hover:bg-amber-50 transition btn-press">
                             <i class="fa-solid fa-list-check"></i> เลือกความผิด / เพิ่มคะแนน
@@ -405,6 +404,16 @@
                     <div class="glass-panel shape-card p-5">
                         <label class="text-[12px] font-black uppercase text-slate-700 mb-2 block tracking-widest glow-text">หมายเหตุเพิ่มเติม</label>
                         <textarea id="notesInput" class="input-field shape-input font-medium text-[14px]" rows="2" placeholder="ใส่เหตุผลเสริม (จะนำไปโชว์ในสลิป)..."></textarea>
+                    </div>
+
+                    <div id="batch-progress-container" class="hidden glass-panel shape-card p-4 mt-3 border-l-4 border-l-blue-500">
+                        <div class="flex justify-between text-[12px] font-black text-blue-600 mb-2">
+                            <span class="glow-text"><i class="fa-solid fa-cloud-arrow-up mr-1"></i> กำลังอัปเดตข้อมูล...</span>
+                            <span id="batch-progress-text">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-200/50 rounded-full h-2 shadow-inner overflow-hidden border border-slate-200">
+                            <div id="batch-progress-bar" class="bg-blue-500 h-full rounded-full transition-all duration-200" style="width: 0%"></div>
+                        </div>
                     </div>
 
                     <button type="submit" id="btn-submit-form" class="btn-press w-full btn-primary font-black text-xl py-4.5 shape-btn shadow-xl flex items-center justify-center gap-3 text-shadow-none mt-3 border border-white/20">
@@ -660,13 +669,6 @@
         }
 
         // ------------------ UI MODALS & VIEWS ------------------
-        function showConfirm(title, message, callback) {
-            document.getElementById('confirm-title').innerText = title;
-            document.getElementById('confirm-msg').innerText = message;
-            confirmCallback = callback; document.getElementById('confirm-modal').classList.add('active');
-        }
-        function closeConfirm() { document.getElementById('confirm-modal').classList.remove('active'); confirmCallback = null; }
-
         function showToast(msg, iconClass) {
             const t = document.getElementById('toast'); document.getElementById('toast-message').innerText = msg; document.getElementById('toast-icon').innerHTML = `<i class="${iconClass}"></i>`;
             t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
@@ -1037,33 +1039,56 @@
             const notes = document.getElementById('notesInput').value;
             const totalTasks = selectedStudentsList.length * selectedOffensesList.length;
 
-            showConfirm('ยืนยันอัปเดตกลุ่ม', `บันทึกนักเรียน ${selectedStudentsList.length} คน x ${selectedOffensesList.length} ข้อหา\nรวมทั้งหมด ${totalTasks} รายการ ใช่หรือไม่?`, async () => {
-                const btn = document.getElementById('btn-submit-form'); const orig = btn.innerHTML;
-                btn.disabled = true;
-                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังประมวลผลข้อมูล...`;
-                
-                let recordsPayload = [];
-                for(let stName of selectedStudentsList) {
-                    for(let off of selectedOffensesList) {
-                        recordsPayload.push({
-                            studentName: stName,
-                            offense: off.name,
-                            points: off.points,
-                            notes: notes,
-                            date: date
-                        });
-                    }
-                }
-                
-                try {
-                    const res = await fetch(CONFIG.GAS_URL, { 
-                        method: 'POST', 
-                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                        body: JSON.stringify({ action: 'saveBatchRecords', records: recordsPayload }) 
+            const btn = document.getElementById('btn-submit-form'); 
+            const origHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังส่งข้อมูล...`;
+            
+            const progContainer = document.getElementById('batch-progress-container');
+            const progBar = document.getElementById('batch-progress-bar');
+            const progText = document.getElementById('batch-progress-text');
+
+            if(progContainer) progContainer.classList.remove('hidden');
+            if(progBar) progBar.style.width = '0%';
+            if(progText) progText.innerText = '0%';
+            
+            let recordsPayload = [];
+            for(let stName of selectedStudentsList) {
+                for(let off of selectedOffensesList) {
+                    recordsPayload.push({
+                        studentName: stName,
+                        offense: off.name,
+                        points: off.points,
+                        notes: notes,
+                        date: date
                     });
-                    const data = await res.json();
-                    
-                    btn.innerHTML = orig; btn.disabled = false;
+                }
+            }
+            
+            try {
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += Math.floor(Math.random() * 15) + 5; 
+                    if(progress > 90) progress = 90;
+                    if(progBar) progBar.style.width = progress + '%';
+                    if(progText) progText.innerText = progress + '%';
+                }, 300);
+
+                const res = await fetch(CONFIG.GAS_URL, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'saveBatchRecords', records: recordsPayload }) 
+                });
+                const data = await res.json();
+                
+                clearInterval(progressInterval);
+                if(progBar) progBar.style.width = '100%';
+                if(progText) progText.innerText = '100%';
+                
+                setTimeout(() => {
+                    btn.innerHTML = origHTML; 
+                    btn.disabled = false;
+                    if(progContainer) progContainer.classList.add('hidden');
                     
                     if(data.success) {
                         showToast(`บันทึกเรียบร้อย (${totalTasks} รายการ)`, 'fa-solid fa-check text-emerald-400');
@@ -1093,11 +1118,13 @@
                     } else {
                         showToast(`เกิดข้อผิดพลาด: ${data.error}`, "fa-solid fa-triangle-exclamation text-red-400");
                     }
-                } catch(e) { 
-                    btn.innerHTML = orig; btn.disabled = false;
-                    showToast(`เซิร์ฟเวอร์ขัดข้อง`, "fa-solid fa-triangle-exclamation text-red-400");
-                }
-            });
+                }, 600);
+            } catch(e) { 
+                btn.innerHTML = origHTML; 
+                btn.disabled = false;
+                if(progContainer) progContainer.classList.add('hidden');
+                showToast(`เซิร์ฟเวอร์ขัดข้อง`, "fa-solid fa-triangle-exclamation text-red-400");
+            }
         }
 
         // ------------------ PREMIUM SLIP EXPORT ------------------
