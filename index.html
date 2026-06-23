@@ -584,16 +584,16 @@
     </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const uploadEl = document.getElementById('set-bg-upload');
-            if(uploadEl) uploadEl.addEventListener('change', handleImageUpload);
+        // ==========================================
+        // จุดที่สำคัญที่สุด! 
+        // ให้นำ URL จาก Apps Script มาวางแทนที่ข้อความด้านล่างนี้
+        // ==========================================
+        const CONFIG = {
+            GAS_URL: "https://script.google.com/macros/s/AKfycbzXOpgeURgwV8IcZFIFJtx5M1oKbs3eDFXr-XRh1ZCmPe3E8ia__PGh3FLDoiotDJ_n/exec" 
+        };
 
-            const logoUploadEl = document.getElementById('set-logo-upload');
-            if(logoUploadEl) logoUploadEl.addEventListener('change', handleLogoUpload);
-            
-            checkPwaInstall();
-            initOffenses();
-            fetchStudentData();
+        // ฐานความผิดทั้งหมด
+        const offenseList = [
             applyPrefs();
             setupPWA();
         });
@@ -689,7 +689,7 @@
 
         // ------------------ DATA LOGIC (Modified for GitHub Fetch) ------------------
         function fetchStudentData() {
-            if (!CONFIG.GAS_URL || CONFIG.GAS_URL === "https://script.google.com/macros/s/AKfycbx3Nf7EUJQWDDukKj-nstaVNIeRthp9WfsXo5iJZ2WerVH0EKWVPDO2xFR4Gv-mYosL/exec") {
+            if (!CONFIG.GAS_URL || CONFIG.GAS_URL === "วาง_WEB_APP_URL_ของคุณครูที่นี่") {
                 const errM = document.getElementById('system-error-msg'); if(errM) errM.classList.remove('hidden');
                 const errD = document.getElementById('error-details'); if(errD) errD.innerText = "กรุณาใส่ Web App URL ในตัวแปร CONFIG.GAS_URL";
                 return;
